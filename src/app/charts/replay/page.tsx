@@ -1,17 +1,16 @@
-import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Stat, Th, Td, Ticker } from "@/components/ui/kit";
+import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Stat } from "@/components/ui/kit";
 import { Candles } from "@/components/ui/candles";
-import { Sparkline, DeltaBars, ProgressBar, Ring } from "@/components/ui/viz";
+import { Sparkline, DeltaBars, Ring } from "@/components/ui/viz";
 import { ReplayControls } from "@/components/helios/replay-controls";
 import { Icon } from "@/components/icon-map";
-import { Bolt, Sparkle, Shield, ChevronRight, Activity } from "@/components/icons";
+import { Sparkle, Shield } from "@/components/icons";
 import {
-  HELIOS_SYMBOLS,
   REPLAY_SESSIONS,
   simPosition,
   getCandles,
   cvdSeries,
 } from "@/lib/data/helios";
-import { fmtUsd, fmtSigned, fmtSignedPct, fmtInt, signClass, fmtCompact } from "@/lib/format";
+import { fmtUsd, fmtSignedPct, fmtInt, fmtCompact } from "@/lib/format";
 
 export const metadata = { title: "HELIOS — Replay & Sim" };
 
@@ -19,11 +18,9 @@ const ACTIVE_SESSION = REPLAY_SESSIONS[0];
 const ACTIVE_SYM = ACTIVE_SESSION.sym;
 
 export default function ReplayPage() {
-  const sym = HELIOS_SYMBOLS.find((s) => s.sym === ACTIVE_SYM)!;
   const candles = getCandles(ACTIVE_SYM, "5m", 80);
   const pos = simPosition(ACTIVE_SYM);
   const cvd = cvdSeries(ACTIVE_SYM, 60);
-  const pnlColor = signClass(pos.pnl);
 
   // Bracket / OCO levels display
   const riskAmount = pos.avgPrice - pos.stop;

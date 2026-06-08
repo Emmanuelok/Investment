@@ -1,9 +1,9 @@
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Stat, Th, Td, Ticker, StatusDot } from "@/components/ui/kit";
 import { Sparkline, ProgressBar, Ring } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
-import { Bolt, Sparkle, ChevronRight, Activity, Target } from "@/components/icons";
-import { SCANNER_SETUPS, HELIOS_SYMBOLS, getCandles } from "@/lib/data/helios";
-import { fmtUsd, fmtSignedPct, signClass, fmtNum, fmtCompact } from "@/lib/format";
+import { Bolt, Sparkle, Activity, Target } from "@/components/icons";
+import { SCANNER_SETUPS } from "@/lib/data/helios";
+import { fmtUsd, fmtSignedPct, signClass, fmtCompact } from "@/lib/format";
 import { priceWalk } from "@/lib/rng";
 
 export const metadata = { title: "HELIOS — AI Scanner" };
@@ -309,10 +309,14 @@ export default function ScannerPage() {
               {Object.entries(SETUP_TONES).map(([type, tone]) => {
                 const count = SCANNER_SETUPS.filter((s) => s.setup === type).length;
                 const pct = (count / SCANNER_SETUPS.length) * 100;
+                const colorMap: Record<string, string> = {
+                  ai: "var(--ai)", accent: "var(--accent)", pos: "var(--pos)",
+                  info: "var(--info)", warn: "var(--warn)",
+                };
                 return (
                   <div key={type} className="flex items-center gap-2">
                     <span className="w-28 text-xs text-dim shrink-0">{type}</span>
-                    <ProgressBar value={pct} max={100} color={`var(--${tone === "ai" ? "ai" : tone === "accent" ? "accent" : tone === "pos" ? "pos" : tone === "info" ? "info" : "warn"})`} height={5} className="flex-1" />
+                    <ProgressBar value={pct} max={100} color={colorMap[tone] ?? "var(--accent)"} height={5} className="flex-1" />
                     <span className="w-4 text-right font-mono text-xs text-dim shrink-0">{count}</span>
                   </div>
                 );

@@ -10,7 +10,7 @@ import {
   Ticker,
   StatusDot,
 } from "@/components/ui/kit";
-import { Sparkline, MiniBars, ProgressBar } from "@/components/ui/viz";
+import { Sparkline, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { ChevronRight } from "@/components/icons";
 import { WEB_SIGNALS, DEMAND_NOWCAST } from "@/lib/data/argus";

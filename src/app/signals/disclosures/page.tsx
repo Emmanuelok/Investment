@@ -298,7 +298,7 @@ export default function DisclosuresPage() {
                   <Th>Company</Th>
                   <Th right>Spend</Th>
                   <Th right>QoQ</Th>
-                  <Th mono={false}>Focus Area</Th>
+                  <Th>Focus Area</Th>
                 </tr>
               </thead>
               <tbody>

@@ -1,5 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, Th, Td, KpiCard, StatusDot } from "@/components/ui/kit";
-import { Sparkline, ProgressBar, DeltaBars } from "@/components/ui/viz";
+import { Sparkline, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { Bolt, Shield, Warn, ChevronRight, Play } from "@/components/icons";
 import {

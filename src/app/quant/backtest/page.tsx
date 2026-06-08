@@ -2,7 +2,7 @@ import { PageHeader, Panel, PanelHeader, Chip, Th, Td, KpiCard } from "@/compone
 import { Sparkline, DeltaBars } from "@/components/ui/viz";
 import { Candles } from "@/components/ui/candles";
 import { Icon } from "@/components/icon-map";
-import { Warn, Shield, Play, Bolt } from "@/components/icons";
+import { Warn, Shield, Play } from "@/components/icons";
 import {
   backtestCandles,
   oosEquityCurve,

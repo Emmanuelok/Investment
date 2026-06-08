@@ -1,5 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, Th, Td, KpiCard } from "@/components/ui/kit";
-import { Sparkline, HeatRow, ProgressBar, Ring } from "@/components/ui/viz";
+import { Sparkline, HeatRow, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { Sparkle, Bolt, Flask } from "@/components/icons";
 import {
@@ -7,7 +7,7 @@ import {
   ROBUSTNESS_GRID,
   DSL_OPERATORS,
 } from "@/lib/data/kepler";
-import { fmtNum, fmtPct, fmtSignedPct, signClass } from "@/lib/format";
+import { fmtNum, fmtPct, fmtSignedPct } from "@/lib/format";
 import { priceWalk, Rng } from "@/lib/rng";
 import { cn } from "@/lib/cn";
 

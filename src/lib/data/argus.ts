@@ -3,7 +3,7 @@
  * Extra data for the 4 ARGUS signal pages.
  * All series are deterministic (seeded Rng / priceWalk). No Math.random().
  */
-import { Rng, priceWalk } from "@/lib/rng";
+import { priceWalk } from "@/lib/rng";
 
 /* ── Extended signal universe (supplements CANDIDATES from data.ts) ─────── */
 export type Signal = {
@@ -18,8 +18,6 @@ export type Signal = {
   families: Array<"Disclosure" | "NLP" | "Web" | "Consumer">;
   spark: number[];
 };
-
-const r = (seed: string) => new Rng(seed);
 
 export const EXTRA_SIGNALS: Signal[] = [
   {

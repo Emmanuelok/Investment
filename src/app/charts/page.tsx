@@ -1,8 +1,8 @@
-import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Stat, Ticker } from "@/components/ui/kit";
+import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Ticker } from "@/components/ui/kit";
 import { Candles } from "@/components/ui/candles";
 import { Sparkline, DeltaBars } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
-import { Activity, Wave, ChevronRight } from "@/components/icons";
+import { Activity } from "@/components/icons";
 import {
   HELIOS_SYMBOLS,
   CHART_TYPES,

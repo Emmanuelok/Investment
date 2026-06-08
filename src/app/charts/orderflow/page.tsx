@@ -1,4 +1,4 @@
-import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Stat, Th, Td, Ticker } from "@/components/ui/kit";
+import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Ticker } from "@/components/ui/kit";
 import { DeltaBars, Sparkline } from "@/components/ui/viz";
 import { OrderBookHeatmap } from "@/components/helios/heatmap";
 import { FootprintCluster } from "@/components/helios/footprint";

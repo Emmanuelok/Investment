@@ -1,7 +1,7 @@
 import { PageHeader, Panel, PanelHeader, Chip, Th, Td } from "@/components/ui/kit";
-import { ProgressBar, HeatRow } from "@/components/ui/viz";
+import { ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
-import { Flask, Database, Play, Bolt, Clock, Sparkle } from "@/components/icons";
+import { Database, Play, Bolt, Clock, Sparkle } from "@/components/icons";
 import {
   DATASET_CATALOG,
   DSL_EXAMPLES,
