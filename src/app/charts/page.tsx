@@ -3,6 +3,7 @@ import { Candles } from "@/components/ui/candles";
 import { Sparkline, DeltaBars } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { Activity } from "@/components/icons";
+import { LiveCandleChart } from "@/components/markets/live-candle-chart";
 import {
   HELIOS_SYMBOLS,
   CHART_TYPES,
@@ -53,6 +54,8 @@ export default function ChartsPage() {
           </div>
         }
       />
+
+      <LiveCandleChart title="Live Equity Chart" presets={["SPY", "NVDA", "AAPL", "MSFT", "TSLA", "AMD"]} />
 
       <LiveChartPanel />
 

@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, Stat, Th, Td, Ticker, KpiCard } from "@/components/ui/kit";
+import { LiveCandleChart } from "@/components/markets/live-candle-chart";
 import { LiveStat } from "@/components/live/live-stat";
 import { Sparkline, ProgressBar, Ring } from "@/components/ui/viz";
 import { Candles } from "@/components/ui/candles";
@@ -39,6 +40,8 @@ export default function SecurityDesPage() {
           </div>
         }
       />
+
+      <LiveCandleChart symbol="NVDA" title="NVDA — Live" />
 
       <SecurityChart seed="NVDA-des" base={128} vol={0.028} label="NVDA" />
 

@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, Th, Td, Ticker, KpiCard, StatusDot } from "@/components/ui/kit";
+import { LiveNews } from "@/components/markets/live-news";
 import { LiveStat, LiveDot } from "@/components/live/live-stat";
 import { Sparkline, Ring, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
@@ -68,6 +69,8 @@ export default function NewsPage() {
           </div>
         }
       />
+
+      <LiveNews />
 
       {/* Aggregate sentiment gauge + KPIs */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
