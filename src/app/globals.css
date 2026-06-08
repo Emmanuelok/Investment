@@ -1,0 +1,205 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PANTHEON design tokens — deep teal-black terminal, emerald/cyan accents.
+   Matched to the ARGUS reference shell.
+   ────────────────────────────────────────────────────────────────────────── */
+:root {
+  /* RGB channel triplets — power Tailwind's <alpha-value> opacity modifiers */
+  --c-base: 7 9 10;
+  --c-surface: 10 14 15;
+  --c-panel: 13 19 20;
+  --c-elevated: 17 26 27;
+  --c-line: 26 36 38;
+  --c-line-strong: 37 52 54;
+  --c-ink: 223 233 234;
+  --c-muted: 127 144 150;
+  --c-dim: 86 103 108;
+  --c-faint: 58 74 78;
+  --c-accent: 31 229 192;
+  --c-pos: 52 210 127;
+  --c-neg: 255 93 99;
+  --c-warn: 242 180 61;
+  --c-info: 74 168 255;
+  --c-ai: 154 140 255;
+
+  /* Resolved colors for inline styles / SVG fill+stroke */
+  --base: rgb(var(--c-base));
+  --surface: rgb(var(--c-surface));
+  --panel: rgb(var(--c-panel));
+  --elevated: rgb(var(--c-elevated));
+  --line: rgb(var(--c-line));
+  --line-strong: rgb(var(--c-line-strong));
+  --ink: rgb(var(--c-ink));
+  --muted: rgb(var(--c-muted));
+  --dim: rgb(var(--c-dim));
+  --faint: rgb(var(--c-faint));
+  --accent: rgb(var(--c-accent));
+  --accent-dim: rgb(var(--c-accent) / 0.2);
+  --pos: rgb(var(--c-pos));
+  --neg: rgb(var(--c-neg));
+  --warn: rgb(var(--c-warn));
+  --info: rgb(var(--c-info));
+  --ai: rgb(var(--c-ai));
+
+  /* --font-sans / --font-mono are injected by next/font on <html> */
+
+  color-scheme: dark;
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  background: var(--base);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background:
+    radial-gradient(900px 520px at 78% -8%, rgba(31, 229, 192, 0.06), transparent 60%),
+    radial-gradient(720px 460px at 8% 8%, rgba(74, 168, 255, 0.04), transparent 55%),
+    var(--base);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+
+/* ── Scrollbars — thin, terminal-style ─────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #1d2a2c;
+  border-radius: 8px;
+  border: 2px solid var(--base);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2a3c3f;
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1d2a2c transparent;
+}
+
+::selection {
+  background: rgba(31, 229, 192, 0.22);
+  color: #eafff8;
+}
+
+/* ── Reusable component classes ────────────────────────────────────────────── */
+@layer components {
+  .panel {
+    @apply rounded-md border border-line bg-panel/80;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.012), transparent 42%);
+  }
+
+  .panel-hover {
+    @apply transition-colors duration-150 hover:border-line-strong hover:bg-elevated/60;
+  }
+
+  .section-label {
+    @apply font-mono text-2xs uppercase tracking-widest text-dim;
+  }
+
+  .kpi-label {
+    @apply font-mono text-2xs uppercase tracking-widest text-dim;
+  }
+
+  .data {
+    @apply font-mono tabular-nums;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1 rounded border border-line px-1.5 py-0.5 font-mono text-2xs uppercase tracking-wider text-muted;
+  }
+
+  .chip-accent {
+    @apply border-accent/30 bg-accent/10 text-accent;
+  }
+
+  .chip-pos {
+    @apply border-pos/30 bg-pos/10 text-pos;
+  }
+
+  .chip-neg {
+    @apply border-neg/30 bg-neg/10 text-neg;
+  }
+
+  .chip-warn {
+    @apply border-warn/30 bg-warn/10 text-warn;
+  }
+
+  .chip-ai {
+    @apply border-ai/30 bg-ai/10 text-ai;
+  }
+
+  .nav-item {
+    @apply flex items-center gap-2.5 rounded px-2.5 py-1.5 text-sm text-muted transition-colors duration-100 hover:bg-elevated/70 hover:text-ink;
+  }
+
+  .nav-item-active {
+    @apply bg-elevated text-ink;
+    box-shadow: inset 2px 0 0 0 var(--accent);
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded border border-line px-3 py-1.5 text-sm text-muted transition-colors hover:border-line-strong hover:bg-elevated hover:text-ink;
+  }
+
+  .btn-accent {
+    @apply border-transparent font-medium text-base;
+    background: linear-gradient(180deg, #2bf0cf, #14c8a6);
+    color: #04140f;
+  }
+  .btn-accent:hover {
+    background: linear-gradient(180deg, #38f7d8, #1ad3b1);
+  }
+
+  .grid-faint {
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: -1px -1px;
+  }
+
+  .scanline {
+    position: relative;
+    overflow: hidden;
+  }
+  .scanline::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 40%;
+    background: linear-gradient(90deg, transparent, rgba(31, 229, 192, 0.07), transparent);
+    animation: sweep 2.6s ease-in-out infinite;
+    pointer-events: none;
+  }
+}
+
+@layer utilities {
+  .text-pos {
+    color: var(--pos);
+  }
+  .text-neg {
+    color: var(--neg);
+  }
+  .num-pos::before {
+    content: "+";
+  }
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+}
