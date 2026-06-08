@@ -35,6 +35,10 @@ const MAP: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   filter: I.Filter,
   play: I.Play,
   command: I.Command,
+  brain: I.Brain,
+  clock: I.Clock,
+  warn: I.Warn,
+  check: I.Check,
 };
 
 export function Icon({ name, ...rest }: { name: string } & SVGProps<SVGSVGElement>) {

@@ -19,7 +19,7 @@ export type NavGroup = {
   items: NavItem[];
 };
 
-export type ModuleKey = "argus" | "obsidian" | "helios" | "kepler" | "aegis" | "core";
+export type ModuleKey = "argus" | "obsidian" | "helios" | "kepler" | "aegis" | "atlas" | "core";
 
 export const MODULES: Record<ModuleKey, { name: string; tag: string; blurb: string }> = {
   core: { name: "PANTHEON", tag: "Command", blurb: "Sovereign finance OS" },
@@ -28,6 +28,7 @@ export const MODULES: Record<ModuleKey, { name: string; tag: string; blurb: stri
   helios: { name: "HELIOS", tag: "Charts & Order Flow", blurb: "Microstructure cockpit" },
   kepler: { name: "KEPLER", tag: "Quant Lab", blurb: "Research → backtest → live" },
   aegis: { name: "AEGIS", tag: "Risk & Execution", blurb: "Portfolio, risk, compliance, EMS" },
+  atlas: { name: "ATLAS", tag: "Platform & Ops", blurb: "The spine that bears the suite" },
 };
 
 export const NAV: NavGroup[] = [
@@ -69,9 +70,13 @@ export const NAV: NavGroup[] = [
     module: "argus",
     items: [
       { label: "Signal Feed", href: "/signals", icon: "pulse", tag: "RavenPack" },
+      { label: "NLP & Events", href: "/signals/events", icon: "brain", tag: "GDELT" },
       { label: "Disclosures", href: "/signals/disclosures", icon: "doc", tag: "Quiver" },
       { label: "Web Signals", href: "/signals/web", icon: "globe", tag: "Thinknum" },
       { label: "Consumer Proxies", href: "/signals/consumer", icon: "cart", tag: "Yipit" },
+      { label: "Ingestion & Sources", href: "/signals/ingestion", icon: "plug" },
+      { label: "Signal Research", href: "/signals/research", icon: "flask" },
+      { label: "Data Governance", href: "/signals/governance", icon: "shield" },
     ],
   },
   {
@@ -96,6 +101,23 @@ export const NAV: NavGroup[] = [
       { label: "Attribution", href: "/attribution", icon: "scale" },
       { label: "Private Markets", href: "/private-markets", icon: "coins" },
       { label: "Optimizer", href: "/optimizer", icon: "target" },
+    ],
+  },
+  {
+    label: "Platform · ATLAS",
+    module: "atlas",
+    items: [
+      { label: "Suite Console", href: "/atlas", icon: "grid" },
+      { label: "Shared Contracts", href: "/atlas/contracts", icon: "book" },
+      { label: "API Gateway", href: "/atlas/gateway", icon: "route" },
+      { label: "Event Bus", href: "/atlas/event-bus", icon: "flow" },
+      { label: "Security Master", href: "/atlas/secmaster", icon: "database" },
+      { label: "Identity & Secrets", href: "/atlas/identity", icon: "lock", tag: "Vault" },
+      { label: "Orchestration", href: "/atlas/orchestration", icon: "cpu", tag: "Dagster" },
+      { label: "Observability", href: "/atlas/observability", icon: "pulse" },
+      { label: "HA · DR · Kill-Switch", href: "/atlas/resilience", icon: "bolt" },
+      { label: "Deployment & IaC", href: "/atlas/deployment", icon: "layers" },
+      { label: "Audit Backbone", href: "/atlas/audit", icon: "shield" },
     ],
   },
   {
