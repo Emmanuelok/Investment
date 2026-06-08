@@ -1,5 +1,7 @@
 import { Bell, Shield, Warn, Database } from "@/components/icons";
 import { CommandTrigger, LiveClock, ArchiveCounter } from "@/components/shell/client-widgets";
+import { LiveTickerBar } from "@/components/live/live-ticker-bar";
+import { KillSwitchChip } from "@/components/shell/kill-switch";
 import { utcClock } from "@/lib/format";
 
 export function TopBar() {
@@ -12,8 +14,11 @@ export function TopBar() {
 
       <div className="flex-1 md:hidden" />
 
+      <LiveTickerBar />
+
       {/* Status cluster */}
       <div className="flex items-center gap-3">
+        <KillSwitchChip />
         <span className="hidden items-center gap-2 rounded-md border border-line bg-base/50 px-2.5 py-1.5 lg:flex">
           <Database width={14} height={14} className="text-accent" />
           <span className="font-mono text-2xs uppercase tracking-wider text-dim">PIT Lake · Archiving</span>

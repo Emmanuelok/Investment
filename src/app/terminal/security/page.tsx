@@ -11,6 +11,7 @@ import {
   NVDA_PEERS,
 } from "@/lib/data/obsidian";
 import { priceWalk } from "@/lib/rng";
+import { SecurityChart } from "@/components/charts/security-chart";
 
 export const metadata = { title: "NVDA Security DES — OBSIDIAN Terminal" };
 
@@ -37,6 +38,8 @@ export default function SecurityDesPage() {
           </div>
         }
       />
+
+      <SecurityChart seed="NVDA-des" base={128} vol={0.028} label="NVDA" />
 
       {/* Header price block */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">

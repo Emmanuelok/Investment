@@ -82,25 +82,79 @@ export function CopilotDock() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [msgs, open]);
 
-  const send = (text: string) => {
-    if (!text.trim()) return;
-    setInput("");
+  const setLast = (fn: (m: Msg) => void) =>
+    setMsgs((m) => {
+      const copy = [...m];
+      const last = copy[copy.length - 1];
+      if (last && last.role === "athena") fn(last);
+      return copy;
+    });
+
+  // Scripted fallback — used when ANTHROPIC_API_KEY isn't set or the call fails.
+  const scripted = (text: string) => {
     const { text: answer, cites } = respond(text);
-    setMsgs((m) => [...m, { role: "user", text }, { role: "athena", text: "", cites, streaming: true }]);
     let i = 0;
     const id = setInterval(() => {
       i += Math.max(2, Math.round(answer.length / 90));
-      setMsgs((m) => {
-        const copy = [...m];
-        const last = copy[copy.length - 1];
-        if (last && last.role === "athena") {
-          last.text = answer.slice(0, i);
-          last.streaming = i < answer.length;
-        }
-        return copy;
+      setLast((last) => {
+        last.text = answer.slice(0, i);
+        last.streaming = i < answer.length;
+        if (i >= answer.length) last.cites = cites;
       });
       if (i >= answer.length) clearInterval(id);
     }, 24);
+  };
+
+  const send = (text: string) => {
+    if (!text.trim()) return;
+    setInput("");
+    const convo = [...msgs.map((m) => ({ role: m.role, text: m.text })), { role: "user" as const, text }];
+    setMsgs((m) => [...m, { role: "user", text }, { role: "athena", text: "", streaming: true }]);
+    void (async () => {
+      try {
+        const res = await fetch("/api/athena", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ messages: convo }),
+        });
+        const ctype = res.headers.get("content-type") || "";
+        if (ctype.includes("application/json") || !res.body) {
+          scripted(text);
+          return;
+        }
+        const reader = res.body.getReader();
+        const dec = new TextDecoder();
+        let buf = "", got = false;
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buf += dec.decode(value, { stream: true });
+          const parts = buf.split("\n\n");
+          buf = parts.pop() || "";
+          for (const p of parts) {
+            const line = p.trim();
+            if (!line.startsWith("data:")) continue;
+            const payload = line.slice(5).trim();
+            if (payload === "[DONE]") {
+              if (got) setLast((l) => { l.streaming = false; l.cites = ["claude-opus-4-8 · live · sovereign"]; });
+              else scripted(text);
+              return;
+            }
+            try {
+              const obj = JSON.parse(payload);
+              if (obj.t) { got = true; setLast((l) => { l.text += obj.t; l.streaming = true; }); }
+              else if (obj.error && !got) { scripted(text); return; }
+            } catch {
+              /* ignore partial */
+            }
+          }
+        }
+        if (!got) scripted(text);
+        else setLast((l) => { l.streaming = false; l.cites = ["claude-opus-4-8 · live · sovereign"]; });
+      } catch {
+        scripted(text);
+      }
+    })();
   };
 
   return (

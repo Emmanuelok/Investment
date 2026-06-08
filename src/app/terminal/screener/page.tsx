@@ -6,6 +6,7 @@ import { signClass, fmtSignedPct } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import { SCREENER_ROWS, SAVED_SCREENS } from "@/lib/data/obsidian";
 import { priceWalk } from "@/lib/rng";
+import { ScreenerInteractive } from "@/components/terminal/screener-interactive";
 
 export const metadata = { title: "Screener / Scanner — OBSIDIAN Terminal" };
 
@@ -16,7 +17,7 @@ export default function ScreenerPage() {
     <div className="space-y-5">
       <PageHeader
         module={{ name: "OBSIDIAN · Terminal", tone: "accent" }}
-        title="Screener & Scanner"
+        title="Screener & Scanner — interactive"
         desc="Multi-factor equity screen across 5,000+ securities. Filter by sector, fundamentals, technicals, and alt-data signals."
         right={
           <div className="flex gap-2">
@@ -31,6 +32,8 @@ export default function ScreenerPage() {
           </div>
         }
       />
+
+      <ScreenerInteractive />
 
       {/* KPI summary */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">

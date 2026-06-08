@@ -14,6 +14,7 @@ import {
   getCandles,
 } from "@/lib/data/helios";
 import { fmtInt, fmtCompact, fmtUsd, signClass, fmtSignedPct } from "@/lib/format";
+import { LiveOrderFlowPanel } from "@/components/live/live-orderflow-panel";
 
 export const metadata = { title: "HELIOS — Order Flow Suite" };
 
@@ -38,6 +39,7 @@ export default function OrderFlowPage() {
 
   return (
     <div className="space-y-5">
+      <LiveOrderFlowPanel />
       <PageHeader
         module={{ name: "HELIOS · Charts & Order Flow", tone: "info" }}
         title="Order Flow Suite"

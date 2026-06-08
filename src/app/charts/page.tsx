@@ -15,6 +15,7 @@ import {
 } from "@/lib/data/helios";
 import { fmtUsd, fmtSignedPct, fmtCompact, signClass } from "@/lib/format";
 import { priceWalk } from "@/lib/rng";
+import { LiveChartPanel } from "@/components/live/live-chart-panel";
 
 export const metadata = { title: "HELIOS — Charting Engine" };
 
@@ -37,7 +38,7 @@ export default function ChartsPage() {
     <div className="space-y-5">
       <PageHeader
         module={{ name: "HELIOS · Charts & Order Flow", tone: "info" }}
-        title="Charting Engine"
+        title="Charting Engine — interactive"
         desc="Multi-timeframe candlestick engine with indicators, overlays, and drawing tools. 60fps GPU rendering when live feed is enabled."
         right={
           <div className="flex items-center gap-2">
@@ -52,6 +53,8 @@ export default function ChartsPage() {
           </div>
         }
       />
+
+      <LiveChartPanel />
 
       {/* KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-6">

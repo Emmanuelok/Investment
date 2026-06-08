@@ -10,6 +10,7 @@ import {
   getCandles,
 } from "@/lib/data/helios";
 import { fmtInt, fmtUsd, fmtCompact, signClass, fmtSignedPct } from "@/lib/format";
+import { LiveOrderFlowPanel } from "@/components/live/live-orderflow-panel";
 
 export const metadata = { title: "HELIOS — DOM & Tape" };
 
@@ -41,6 +42,7 @@ export default function DomPage() {
 
   return (
     <div className="space-y-5">
+      <LiveOrderFlowPanel />
       <PageHeader
         module={{ name: "HELIOS · Charts & Order Flow", tone: "info" }}
         title="DOM & Tape — Jigsaw View"
