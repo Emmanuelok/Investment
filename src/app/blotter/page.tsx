@@ -1,6 +1,6 @@
 import {
   PageHeader, Panel, PanelHeader, Chip, KpiCard, Stat,
-  Th, Td, Ticker, StatusDot, SectionLabel,
+  Th, Td, Ticker, StatusDot,
 } from "@/components/ui/kit";
 import { ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";

@@ -476,7 +476,7 @@ export default function OptimizerPage() {
                 <Th right>Δ Weight</Th>
                 <Th right>Qty</Th>
                 <Th right>Notional</Th>
-                <Th mono={false}>Rationale</Th>
+                <Th>Rationale</Th>
               </tr>
             </thead>
             <tbody>

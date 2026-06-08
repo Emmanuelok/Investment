@@ -118,11 +118,23 @@ export function KpiCard({
   value: ReactNode;
   sub?: ReactNode;
   icon?: ReactNode;
-  tone?: "pos" | "neg" | "warn" | "accent";
+  tone?: "pos" | "neg" | "warn" | "accent" | "ai" | "info";
   className?: string;
 }) {
   const valueColor =
-    tone === "pos" ? "text-pos" : tone === "neg" ? "text-neg" : tone === "warn" ? "text-warn" : tone === "accent" ? "text-accent" : "text-ink";
+    tone === "pos"
+      ? "text-pos"
+      : tone === "neg"
+        ? "text-neg"
+        : tone === "warn"
+          ? "text-warn"
+          : tone === "accent"
+            ? "text-accent"
+            : tone === "ai"
+              ? "text-ai"
+              : tone === "info"
+                ? "text-info"
+                : "text-ink";
   return (
     <Panel hover className={cn("scanline px-4 py-3", className)}>
       <div className="flex items-center justify-between">
@@ -189,9 +201,20 @@ export function PageHeader({
 
 /* ── Tables ───────────────────────────────────────────────────────────────── */
 
-export function Th({ children, className, right }: { children?: ReactNode; className?: string; right?: boolean }) {
+export function Th({
+  children,
+  className,
+  right,
+  colSpan,
+}: {
+  children?: ReactNode;
+  className?: string;
+  right?: boolean;
+  colSpan?: number;
+}) {
   return (
     <th
+      colSpan={colSpan}
       className={cn(
         "select-none border-b border-line px-3 py-2 text-left font-mono text-2xs font-normal uppercase tracking-widest text-dim",
         right && "text-right",
@@ -208,14 +231,16 @@ export function Td({
   className,
   right,
   mono = true,
+  colSpan,
 }: {
   children?: ReactNode;
   className?: string;
   right?: boolean;
   mono?: boolean;
+  colSpan?: number;
 }) {
   return (
-    <td className={cn("border-b border-line/60 px-3 py-2 text-sm", mono && "font-mono tabular-nums", right && "text-right", className)}>
+    <td colSpan={colSpan} className={cn("border-b border-line/60 px-3 py-2 text-sm", mono && "font-mono tabular-nums", right && "text-right", className)}>
       {children}
     </td>
   );
