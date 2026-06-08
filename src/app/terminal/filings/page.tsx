@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, Th, Td, Ticker, StatusDot } from "@/components/ui/kit";
+import { LiveFilings } from "@/components/data/live-filings";
 import { Icon } from "@/components/icon-map";
 import { signClass } from "@/lib/format";
 import { cn } from "@/lib/cn";
@@ -39,6 +40,9 @@ export default function FilingsPage() {
           </div>
         }
       />
+
+      {/* Live EDGAR filings panel */}
+      <LiveFilings />
 
       {/* Filing stats KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">

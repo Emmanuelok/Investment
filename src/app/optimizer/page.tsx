@@ -10,6 +10,7 @@ import {
   type OptObjective,
 } from "@/lib/data/aegis-exec";
 import { fmtNum, fmtUsdCompact, signClass } from "@/lib/format";
+import { OptimizerLab } from "@/components/quant/optimizer-lab";
 import { cn } from "@/lib/cn";
 
 export const metadata = { title: "Optimizer & Construction — AEGIS" };
@@ -303,6 +304,14 @@ export default function OptimizerPage() {
           </div>
         }
       />
+
+      <div className="panel p-4">
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <span className="chip chip-accent">Interactive · solves live</span>
+          <span className="section-label">Efficient frontier — drag risk aversion to re-solve the optimal long-only portfolio</span>
+        </div>
+        <OptimizerLab />
+      </div>
 
       {/* KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">

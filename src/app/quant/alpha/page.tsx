@@ -1,5 +1,6 @@
 import { PageHeader, Panel, PanelHeader, Chip, Th, Td, KpiCard } from "@/components/ui/kit";
 import { Sparkline, HeatRow, ProgressBar } from "@/components/ui/viz";
+import { AlphaLab } from "@/components/quant/alpha-lab";
 import { Icon } from "@/components/icon-map";
 import { Sparkle, Bolt, Flask } from "@/components/icons";
 import {
@@ -61,6 +62,14 @@ export default function AlphaFactoryPage() {
           </div>
         }
       />
+
+      <div className="panel p-4">
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <span className="chip chip-ai">Interactive · evaluates live, point-in-time</span>
+          <span className="section-label">Alpha factory — write an expression, see its IC, decile spread &amp; turnover</span>
+        </div>
+        <AlphaLab />
+      </div>
 
       {/* KPI Deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">

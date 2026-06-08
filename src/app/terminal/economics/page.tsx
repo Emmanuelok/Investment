@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, Stat, Th, Td, KpiCard, StatusDot } from "@/components/ui/kit";
+import { LiveMacro } from "@/components/data/live-macro";
 import { Sparkline, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { signClass, fmtBps } from "@/lib/format";
@@ -154,6 +155,9 @@ export default function EconomicsPage() {
           </div>
         }
       />
+
+      {/* Live FRED macro data panel */}
+      <LiveMacro />
 
       {/* Macro KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
