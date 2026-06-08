@@ -13,6 +13,7 @@ import {
 import { Sparkline, DeltaBars, ProgressBar, MiniBars } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { ChevronRight, Sparkle, Route, Brain } from "@/components/icons";
+import { LiveDot } from "@/components/live/live-stat";
 import {
   CLASSIFIED_EVENTS,
   EVENT_KPI,
@@ -68,6 +69,7 @@ export default function EventsPage() {
         desc="RavenPack-class: every document classified, entity-linked, scored for relevance & novelty. Cheap spaCy/embedding pre-filter saves 84% of LLM calls. Every output cites its source document."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <StatusDot tone="pos" pulse />
             <span className="font-mono text-xs text-dim">live · real-time ingestion</span>
             <Link href="/signals/ingestion" className="btn">Ingestion</Link>

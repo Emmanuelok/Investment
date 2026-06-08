@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td, StatusDot } from "@/components/ui/kit";
+import { LiveStat, LiveDot } from "@/components/live/live-stat";
 import { COMPETITOR_COSTS } from "@/lib/data";
 import { FEED_LICENSES, MNPI_QUARANTINE } from "@/lib/data/core";
 import { fmtUsd, fmtInt } from "@/lib/format";
@@ -34,6 +35,7 @@ export default function LicensesPage() {
         desc="Data feed licensing — display vs. non-display permissions, seat counts, cost tracking, MNPI quarantine policy, and benchmark savings vs. incumbents."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <Chip tone="pos" dot>{activeCount} feeds active</Chip>
             <Chip tone="accent">{fmtUsd(monthlyTotal, 0)}/mo total</Chip>
           </div>
@@ -51,14 +53,14 @@ export default function LicensesPage() {
         />
         <KpiCard
           label="BLOOMBERG SAVINGS"
-          value="$31,980"
+          value={<LiveStat value={31980} prefix="$" decimals={0} vol={0.003} />}
           sub="per seat per year avoided"
           tone="pos"
           icon={<Check width={15} height={15} />}
         />
         <KpiCard
           label="MNPI QUARANTINED"
-          value="2"
+          value={<LiveStat value={2} decimals={0} vol={0.01} />}
           sub="items held before research access"
           tone="warn"
           icon={<Shield width={15} height={15} />}

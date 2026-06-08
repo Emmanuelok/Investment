@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td } from "@/components/ui/kit";
+import { LiveStat, LiveDot } from "@/components/live/live-stat";
 import { PAIN_POINTS, COMPETITOR_COSTS } from "@/lib/data";
 import { fmtUsd } from "@/lib/format";
 import { Shield, Sparkle, Lock, Book, Bolt, Check } from "@/components/icons";
@@ -72,6 +73,7 @@ export default function WhyPage() {
         desc="One sovereign finance OS — institutional data, glass-box analytics, AI that cites its sources, and zero per-seat fees."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <Chip tone="pos" dot>14 / 15 sources live</Chip>
             <Chip tone="accent">Self-hosted · VPC</Chip>
           </div>
@@ -82,14 +84,14 @@ export default function WhyPage() {
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <KpiCard
           label="BLOOMBERG DELTA"
-          value="$31,980"
+          value={<LiveStat value={31980} prefix="$" decimals={0} vol={0.003} />}
           sub="per seat per year — vs PANTHEON at $0 licensing"
           tone="neg"
           icon={<Icon name="coins" width={15} height={15} />}
         />
         <KpiCard
           label="FIGURES TRACEABLE"
-          value="100%"
+          value={<LiveStat value={100} suffix="%" decimals={0} vol={0.006} />}
           sub="Glass-box — every number has a lineage"
           tone="pos"
           icon={<Check width={15} height={15} />}
@@ -103,7 +105,7 @@ export default function WhyPage() {
         />
         <KpiCard
           label="FABRICATED FIGURES"
-          value="0"
+          value={<LiveStat value={0} decimals={0} vol={0.01} />}
           sub="ATHENA cites or declines — never invents"
           tone="pos"
           icon={<Sparkle width={15} height={15} />}

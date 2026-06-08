@@ -2,6 +2,7 @@ import {
   PageHeader, Panel, PanelHeader, Chip, KpiCard, Stat,
   Th, Td, Ticker, StatusDot,
 } from "@/components/ui/kit";
+import { LiveDot } from "@/components/live/live-stat";
 import { ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { Shield, Bolt } from "@/components/icons";
@@ -73,6 +74,7 @@ export default function BlotterPage() {
         desc="Live order lifecycle management — every order audited from creation through reconciliation. Fat-finger guards and kill-switch active."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <button className="btn btn-accent flex items-center gap-1.5">
               <Bolt width={14} height={14} />
               New Order

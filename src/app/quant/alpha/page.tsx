@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, Th, Td, KpiCard } from "@/components/ui/kit";
+import { LiveStat, LiveDot } from "@/components/live/live-stat";
 import { Sparkline, HeatRow, ProgressBar } from "@/components/ui/viz";
 import { AlphaLab } from "@/components/quant/alpha-lab";
 import { Icon } from "@/components/icon-map";
@@ -51,6 +52,7 @@ export default function AlphaFactoryPage() {
         desc="Expression-based alpha library with IC analytics, decorrelation, and sub-universe robustness grids. Inspired by WorldQuant BRAIN / Quantopian architecture."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <button className="btn">
               <Flask width={14} height={14} />
               New Alpha
@@ -75,21 +77,21 @@ export default function AlphaFactoryPage() {
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <KpiCard
           label="ACTIVE ALPHAS"
-          value="4"
+          value={<LiveStat value={4} decimals={0} vol={0.01} />}
           sub="3 shadow, 1 retired"
           tone="pos"
           icon={<Icon name="flask" width={14} height={14} />}
         />
         <KpiCard
           label="POOL SHARPE"
-          value="1.81"
+          value={<LiveStat value={1.81} decimals={2} vol={0.004} />}
           sub="decorrelated composite"
           tone="accent"
           icon={<Icon name="gauge" width={14} height={14} />}
         />
         <KpiCard
           label="MAX POOL CORR"
-          value="0.59"
+          value={<LiveStat value={0.59} decimals={2} vol={0.02} />}
           sub="A-031 to pool (retired)"
           tone="warn"
           icon={<Icon name="wave" width={14} height={14} />}

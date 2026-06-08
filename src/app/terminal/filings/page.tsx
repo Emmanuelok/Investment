@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, Th, Td, Ticker, StatusDot } from "@/components/ui/kit";
+import { LiveDot } from "@/components/live/live-stat";
 import { LiveFilings } from "@/components/data/live-filings";
 import { Icon } from "@/components/icon-map";
 import { signClass } from "@/lib/format";
@@ -34,6 +35,7 @@ export default function FilingsPage() {
         desc="EDGAR filings browser, 13F institutional holdings tracker, and Form 4 insider transactions. Source: SEC EDGAR public feeds."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <StatusDot tone="pos" pulse />
             <span className="font-mono text-xs text-muted">SEC EDGAR · live</span>
             <Chip tone="accent">EDGAR</Chip>

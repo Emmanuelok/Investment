@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LiveStat, LiveDot } from "@/components/live/live-stat";
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td, StatusDot } from "@/components/ui/kit";
 import { ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
@@ -54,6 +55,7 @@ export default function AtlasAuditPage() {
         desc="Centralized, tamper-evident audit backbone for the entire PANTHEON suite. Events are aggregated from all 6 platforms via the ATLAS event bus — this is the immutable record of every significant action across the system."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <Chip tone="pos" dot>Hash-chain verified</Chip>
             <Chip tone="accent">Append-only</Chip>
             <Chip tone="info">6 services emitting</Chip>
@@ -72,7 +74,7 @@ export default function AtlasAuditPage() {
         />
         <KpiCard
           label="EVENTS TODAY"
-          value="2,241"
+          value={<LiveStat value={2241} decimals={0} vol={0.01} />}
           sub="since 00:00 UTC · 6-service aggregate"
           icon={<Activity width={15} height={15} />}
         />

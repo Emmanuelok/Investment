@@ -13,6 +13,7 @@ import {
 import { Sparkline, ProgressBar, MiniBars } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { ChevronRight } from "@/components/icons";
+import { LiveDot } from "@/components/live/live-stat";
 import {
   INGESTION_SOURCES,
   INGESTION_KPI,
@@ -66,6 +67,7 @@ export default function IngestionPage() {
         desc="Every fetch lands an immutable PIT artifact: {source, fetched_at, as_of, content_hash, license_mode}. Partitioned by source/date. Never overwritten. Blocked sources are refused by the permission registry."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <StatusDot tone="pos" pulse />
             <span className="font-mono text-xs text-dim">{healthySources} healthy · {degradedSources} degraded</span>
             <Link href="/signals/governance" className="btn">Governance</Link>

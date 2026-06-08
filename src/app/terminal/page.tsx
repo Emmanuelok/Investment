@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Stat, Th, Td, Ticker, StatusDot } from "@/components/ui/kit";
+import { LiveStat, LiveDot } from "@/components/live/live-stat";
 import { Sparkline, Ring, ProgressBar } from "@/components/ui/viz";
 import { Candles } from "@/components/ui/candles";
 import { Icon } from "@/components/icon-map";
@@ -34,6 +35,7 @@ export default function MarketsOverviewPage() {
         desc="Global multi-asset snapshot — indices, sectors, movers, FX, rates, and crypto. As-of close, demo data."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <StatusDot tone="pos" pulse />
             <span className="font-mono text-xs text-muted">MARKETS OPEN</span>
             <Chip tone="accent">NYSE · 14:32 ET</Chip>
@@ -168,9 +170,9 @@ export default function MarketsOverviewPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-3 pt-1">
-              <Stat label="VIX" value="14.82" tone="accent" />
-              <Stat label="VXST" value="12.41" tone="accent" />
-              <Stat label="SKEW" value="134.2" />
+              <Stat label="VIX" value={<LiveStat value={14.82} decimals={2} vol={0.004} />} tone="accent" />
+              <Stat label="VXST" value={<LiveStat value={12.41} decimals={2} vol={0.004} />} tone="accent" />
+              <Stat label="SKEW" value={<LiveStat value={134.2} decimals={1} vol={0.004} />} />
               <Stat label="NYSE TICK" value="+482" tone="pos" />
             </div>
           </div>

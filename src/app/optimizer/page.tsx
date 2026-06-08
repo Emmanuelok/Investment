@@ -2,6 +2,7 @@ import {
   PageHeader, Panel, PanelHeader, Chip, KpiCard, Stat,
   Th, Td, Ticker,
 } from "@/components/ui/kit";
+import { LiveDot } from "@/components/live/live-stat";
 import { ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { Bolt, Scale } from "@/components/icons";
@@ -293,6 +294,7 @@ export default function OptimizerPage() {
         desc="Efficient frontier, objective selection, constraint enforcement, proposed-trade generation and pre-trade what-if analysis."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <button className="btn flex items-center gap-1.5">
               <Scale width={14} height={14} />
               Run Optimizer

@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, Th, Td, Ticker, KpiCard } from "@/components/ui/kit";
+import { LiveStat } from "@/components/live/live-stat";
 import { Sparkline } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { Sparkle } from "@/components/icons";
@@ -37,9 +38,9 @@ export default function ScreenerPage() {
 
       {/* KPI summary */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <KpiCard label="UNIVERSE" value="5,284" sub="US equities · ADV > $1M" icon={<Icon name="grid" width={14} height={14} />} />
+        <KpiCard label="UNIVERSE" value={<LiveStat value={5284} decimals={0} vol={0.01} />} sub="US equities · ADV > $1M" icon={<Icon name="grid" width={14} height={14} />} />
         <KpiCard label="PASSED SCREEN" value={`${rows.length}`} sub="Current filters applied" tone="accent" icon={<Icon name="filter" width={14} height={14} />} />
-        <KpiCard label="AVG P/E" value="32.4x" sub="Filtered universe" icon={<Icon name="scale" width={14} height={14} />} />
+        <KpiCard label="AVG P/E" value={<LiveStat value={32.4} suffix="x" decimals={1} vol={0.006} />} sub="Filtered universe" icon={<Icon name="scale" width={14} height={14} />} />
         <KpiCard label="AVG REV GROWTH" value="+21.8%" sub="YoY, filtered" tone="pos" icon={<Icon name="activity" width={14} height={14} />} />
       </div>
 

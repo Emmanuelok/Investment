@@ -12,6 +12,7 @@ import {
 import { ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { ChevronRight, Check, Warn, Shield } from "@/components/icons";
+import { LiveDot } from "@/components/live/live-stat";
 import {
   PERMISSION_REGISTRY,
   GOVERNANCE_KPI,
@@ -48,6 +49,7 @@ export default function GovernancePage() {
         desc="First-class, non-negotiable. Lawful sourcing, MNPI quarantine, PII minimization, and a full permission registry that refuses blocked sources. Compliance is what makes a real alt-data operation durable."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <StatusDot tone="pos" />
             <span className="font-mono text-xs text-dim">policy engine active</span>
             <Link href="/signals/ingestion" className="btn">Ingestion</Link>

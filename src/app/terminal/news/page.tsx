@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, Th, Td, Ticker, KpiCard, StatusDot } from "@/components/ui/kit";
+import { LiveStat, LiveDot } from "@/components/live/live-stat";
 import { Sparkline, Ring, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { Sparkle } from "@/components/icons";
@@ -60,6 +61,7 @@ export default function NewsPage() {
         desc="RavenPack-lite real-time news stream with LLM sentiment scoring, event classification, novelty detection, and per-security sentiment leaders."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <StatusDot tone="pos" pulse />
             <span className="font-mono text-xs text-muted">GDELT + Finnhub · live</span>
             <Chip tone="ai"><Sparkle width={11} height={11} /> AI Scored</Chip>
@@ -87,9 +89,9 @@ export default function NewsPage() {
             </div>
           </div>
         </Panel>
-        <KpiCard label="NEWS ITEMS (24H)" value="4,182" sub="LLM classified + scored" icon={<Icon name="radio" width={14} height={14} />} />
-        <KpiCard label="AVG NOVELTY" value="0.54" sub="vs trailing 30D corpus" tone="accent" icon={<Icon name="sparkle" width={14} height={14} />} />
-        <KpiCard label="EVENT INTENSITY" value="0.68" sub="↑ elevated vs baseline" tone="warn" icon={<Icon name="activity" width={14} height={14} />} />
+        <KpiCard label="NEWS ITEMS (24H)" value={<LiveStat value={4182} decimals={0} vol={0.01} />} sub="LLM classified + scored" icon={<Icon name="radio" width={14} height={14} />} />
+        <KpiCard label="AVG NOVELTY" value={<LiveStat value={0.54} decimals={2} vol={0.02} />} sub="vs trailing 30D corpus" tone="accent" icon={<Icon name="sparkle" width={14} height={14} />} />
+        <KpiCard label="EVENT INTENSITY" value={<LiveStat value={0.68} decimals={2} vol={0.02} />} sub="↑ elevated vs baseline" tone="warn" icon={<Icon name="activity" width={14} height={14} />} />
       </div>
 
       {/* News stream + event breakdown */}

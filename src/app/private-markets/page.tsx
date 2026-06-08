@@ -2,6 +2,7 @@ import {
   PageHeader, Panel, PanelHeader, Chip, KpiCard, Stat,
   Th, Td, StatusDot,
 } from "@/components/ui/kit";
+import { LiveDot } from "@/components/live/live-stat";
 import { ProgressBar, Sparkline } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { Database } from "@/components/icons";
@@ -228,6 +229,7 @@ export default function PrivateMarketsPage() {
         desc="PE · VC · Real Estate · Infrastructure · Private Credit — commitments, J-curve, IRR/MOIC/TVPI and unified book alongside public/crypto."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <Chip tone="info">eFront / Preqin connector</Chip>
             <Chip tone="default">DEMO DATA</Chip>
           </div>

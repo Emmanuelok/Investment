@@ -13,6 +13,7 @@ import {
 import { Sparkline, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { ChevronRight, Sparkle, Route } from "@/components/icons";
+import { LiveDot } from "@/components/live/live-stat";
 import { CANDIDATES, FAMILY_COVERAGE } from "@/lib/data";
 import { EXTRA_SIGNALS, SIGNAL_KPIS } from "@/lib/data/argus";
 import { fmtSigned, fmtNum, signClass } from "@/lib/format";
@@ -68,6 +69,7 @@ export default function SignalFeedPage() {
         desc="Cross-family composite signals — point-in-time (as_of ≤ t), glass-box theses, novelty-scored, MNPI-clean."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <StatusDot tone="pos" pulse />
             <span className="font-mono text-xs text-dim">live · 47 signals active</span>
             <Link href="/signals/disclosures" className="btn">Disclosures</Link>

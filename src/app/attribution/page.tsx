@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td, Stat, StatusDot } from "@/components/ui/kit";
+import { LiveDot } from "@/components/live/live-stat";
 import { Sparkline, ProgressBar, DeltaBars, Ring } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import {
@@ -54,6 +55,7 @@ export default function AttributionPage() {
         desc="GIPS-compliant composite performance · Brinson-Fachler sector attribution · Factor-based decomposition · Benchmark-relative analytics. All attribution is linked to the risk snapshot and reproducible."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <div className="flex items-center gap-1.5 rounded border border-accent/30 bg-accent/10 px-2.5 py-1.5 font-mono text-xs text-accent">
               <Icon name="database" width={12} height={12} />
               {SNAPSHOT_ID}

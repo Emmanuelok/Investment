@@ -2,6 +2,7 @@ import {
   PageHeader, Panel, PanelHeader, Chip, KpiCard, Stat,
   Th, Td, Ticker, StatusDot,
 } from "@/components/ui/kit";
+import { LiveDot } from "@/components/live/live-stat";
 import { ProgressBar, Sparkline, DeltaBars } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { Shield, Wave } from "@/components/icons";
@@ -49,6 +50,7 @@ export default function ExecutionPage() {
         desc="Algo scheduling, smart order routing, FIX session management and transaction cost analytics. Kill-switch and fat-finger guards enforced at every layer."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <button className="btn flex items-center gap-1.5 border-neg/40 text-neg hover:bg-neg/10">
               <Shield width={14} height={14} />
               Kill Switch

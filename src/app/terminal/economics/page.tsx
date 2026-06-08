@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, Stat, Th, Td, KpiCard, StatusDot } from "@/components/ui/kit";
+import { LiveDot } from "@/components/live/live-stat";
 import { LiveMacro } from "@/components/data/live-macro";
 import { Sparkline, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
@@ -149,6 +150,7 @@ export default function EconomicsPage() {
         desc="Macro KPI deck, yield curve visualization, rates/inflation/growth/employment charts, recession indicators, and economic release calendar."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <StatusDot tone="pos" pulse />
             <span className="font-mono text-xs text-muted">FRED · BLS · BEA · ISM</span>
             <Chip tone="accent">FRED</Chip>

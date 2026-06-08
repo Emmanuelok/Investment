@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td } from "@/components/ui/kit";
+import { LiveStat } from "@/components/live/live-stat";
 import { Sparkline, ProgressBar } from "@/components/ui/viz";
 import { DATASETS, SNAPSHOTS, STORAGE_GROWTH } from "@/lib/data/core";
 import { Icon } from "@/components/icon-map";
@@ -17,9 +18,6 @@ const LINEAGE_NODES = [
   { level: 3, id: "finnhubSource", label: "Finnhub + GDELT", value: "as_of=2026-06-08 published_at", color: "border-line bg-base/40 text-faint" },
 ];
 
-const totalRows = "358.9B";
-const totalObs = "312,884";
-
 export default function DataLakePage() {
   // Build mini chart data (last 20 points for display)
   const growthSeries = STORAGE_GROWTH.slice(-20);
@@ -37,21 +35,21 @@ export default function DataLakePage() {
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <KpiCard
           label="TOTAL ARCHIVE"
-          value="38.4 TB"
+          value={<LiveStat value={38.4} suffix=" TB" decimals={1} vol={0.002} />}
           sub="+84 GB ingested today"
           tone="accent"
           icon={<Database width={15} height={15} />}
         />
         <KpiCard
           label="OBSERVATIONS"
-          value={totalObs}
+          value={<LiveStat value={312884} decimals={0} vol={0.01} />}
           sub="events classified today"
           tone="accent"
           icon={<Icon name="activity" width={15} height={15} />}
         />
         <KpiCard
           label="TOTAL ROWS"
-          value={totalRows}
+          value={<LiveStat value={358.9} suffix="B" decimals={1} vol={0.003} />}
           sub="across 9 Parquet datasets"
           icon={<Icon name="layers" width={15} height={15} />}
         />

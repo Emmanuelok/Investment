@@ -1,3 +1,4 @@
+import { LiveStat, LiveDot } from "@/components/live/live-stat";
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td, StatusDot } from "@/components/ui/kit";
 import { ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
@@ -38,6 +39,7 @@ export default function ResiliencePage() {
         desc="High-availability, disaster recovery, graceful degradation, and the global kill-switch. PANTHEON is designed to never silently stall — every dependency failure has an explicit fallback."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <Chip tone="pos" dot>{healthyCount}/{SERVICE_HEALTH.length} healthy</Chip>
             {degradedCount > 0 && <Chip tone="warn" dot>{degradedCount} degraded</Chip>}
           </div>
@@ -88,7 +90,7 @@ export default function ResiliencePage() {
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <KpiCard
           label="PLATFORM UPTIME"
-          value="99.97%"
+          value={<LiveStat value={99.97} suffix="%" decimals={2} vol={0.0004} />}
           sub="trailing 90 days · all 6 services combined"
           tone="pos"
           icon={<Check width={15} height={15} />}

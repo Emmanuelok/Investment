@@ -13,6 +13,7 @@ import {
 import { Sparkline, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { ChevronRight } from "@/components/icons";
+import { LiveDot } from "@/components/live/live-stat";
 import { WEB_SIGNALS, DEMAND_NOWCAST } from "@/lib/data/argus";
 import { fmtSignedPct, fmtCompact, fmtNum, signClass } from "@/lib/format";
 import { cn } from "@/lib/cn";
@@ -40,6 +41,7 @@ export default function WebSignalsPage() {
         desc="Job-postings, web traffic, app-store rankings, and search interest — per-company demand nowcasting from public web data."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <StatusDot tone="pos" pulse />
             <span className="font-mono text-xs text-dim">Thinknum · 1 seat licensed</span>
             <Link href="/signals" className="btn">

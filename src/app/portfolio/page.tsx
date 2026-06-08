@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td, Ticker, Stat, StatusDot } from "@/components/ui/kit";
+import { LiveDot } from "@/components/live/live-stat";
 import { Sparkline, ProgressBar, Ring } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import {
@@ -88,6 +89,7 @@ export default function PortfolioPage() {
         desc="Point-in-time IBOR snapshot — multi-entity hierarchy, multi-asset positions, cash ledger, and live exposure summary. All figures traceable to snapshot id."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <div className="flex items-center gap-1.5 rounded border border-accent/30 bg-accent/10 px-2.5 py-1.5 font-mono text-xs text-accent">
               <Icon name="database" width={12} height={12} />
               {SNAPSHOT_ID}

@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td, StatusDot } from "@/components/ui/kit";
+import { LiveStat } from "@/components/live/live-stat";
 import { Sparkle, Brain, Shield, Database, Route, Book, Bolt, Activity, Check } from "@/components/icons";
 import { Icon } from "@/components/icon-map";
 import AthenaOpenButton from "@/components/core/AthenaOpenButton";
@@ -103,7 +104,7 @@ export default function CopilotPage() {
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <KpiCard
           label="TOOLS BOUND"
-          value="6"
+          value={<LiveStat value={6} decimals={0} vol={0.01} />}
           sub="Risk · Screener · Backtest · Flow · Compliance · Filings"
           tone="accent"
           icon={<Bolt width={15} height={15} />}
@@ -117,7 +118,7 @@ export default function CopilotPage() {
         />
         <KpiCard
           label="HALLUCINATIONS"
-          value="0"
+          value={<LiveStat value={0} decimals={0} vol={0.01} />}
           sub="Grounded in data fabric — refuses to fabricate"
           tone="pos"
           icon={<Shield width={15} height={15} />}

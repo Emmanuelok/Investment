@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td } from "@/components/ui/kit";
+import { LiveStat, LiveDot } from "@/components/live/live-stat";
 import { AUDIT_LOG } from "@/lib/data/core";
 import { Icon } from "@/components/icon-map";
 import { Shield, Lock, Database, Check, Activity } from "@/components/icons";
@@ -36,6 +37,7 @@ export default function AuditPage() {
         desc="Immutable, append-only, cryptographically hash-chained log of every action across all PANTHEON modules. Full reproducibility — any state can be reconstructed from this log."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <Chip tone="pos" dot>Append-only</Chip>
             <Chip tone="accent">SHA-256 chained</Chip>
           </div>
@@ -46,14 +48,14 @@ export default function AuditPage() {
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <KpiCard
           label="TOTAL LOG ENTRIES"
-          value="48,221"
+          value={<LiveStat value={48221} decimals={0} vol={0.01} />}
           sub="since inception — immutable, never deleted"
           tone="accent"
           icon={<Database width={15} height={15} />}
         />
         <KpiCard
           label="ENTRIES TODAY"
-          value="312"
+          value={<LiveStat value={312} decimals={0} vol={0.01} />}
           sub="across all modules since 00:00 UTC"
           icon={<Activity width={15} height={15} />}
         />
@@ -66,7 +68,7 @@ export default function AuditPage() {
         />
         <KpiCard
           label="MUTATIONS"
-          value="0"
+          value={<LiveStat value={0} decimals={0} vol={0.01} />}
           sub="Records are write-once — no UPDATE, no DELETE"
           tone="pos"
           icon={<Lock width={15} height={15} />}

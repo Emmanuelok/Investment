@@ -13,6 +13,7 @@ import {
 import { Sparkline, DeltaBars, ProgressBar, MiniBars } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { ChevronRight, Sparkle, Check, Warn } from "@/components/icons";
+import { LiveDot } from "@/components/live/live-stat";
 import {
   SIGNAL_LIBRARY,
   RESEARCH_KPI,
@@ -58,6 +59,7 @@ export default function ResearchPage() {
         desc="PIT-validated signal library: IC/IR metrics, decay analysis, decile-spread, look-ahead-bias guards, walk-forward OOS testing. Validated against the KEPLER/AEGIS backtester. Signals are versioned and composable."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <StatusDot tone="pos" pulse />
             <span className="font-mono text-xs text-dim">{RESEARCH_KPI.signalsInLibrary} signals · {IC_HORIZONS.length} horizons tested</span>
             <Link href="/signals/governance" className="btn">Governance</Link>

@@ -1,3 +1,4 @@
+import { LiveStat, LiveDot } from "@/components/live/live-stat";
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td, StatusDot } from "@/components/ui/kit";
 import { Sparkline, MiniBars, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
@@ -52,6 +53,7 @@ export default function ObservabilityPage() {
         desc="Real-time platform telemetry, SLOs, distributed traces, and structured logs across all 6 PANTHEON services. Markets never stop — neither does the signal."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <Chip tone="neg" dot>{firingCount} alerts firing</Chip>
             <Chip tone="default">Prometheus · Grafana · Loki · Jaeger</Chip>
           </div>
@@ -76,13 +78,13 @@ export default function ObservabilityPage() {
         />
         <KpiCard
           label="P99 LATENCY"
-          value="28.4 ms"
+          value={<LiveStat value={28.4} suffix=" ms" decimals={1} vol={0.05} />}
           sub="gateway → service round-trip · 1-min rolling"
           icon={<Clock width={15} height={15} />}
         />
         <KpiCard
           label="ERROR BUDGET BURN"
-          value="1.8×"
+          value={<LiveStat value={1.8} suffix="×" decimals={1} vol={0.02} />}
           sub="order latency SLO burning 1.8× normal rate"
           tone="warn"
           icon={<Warn width={15} height={15} />}

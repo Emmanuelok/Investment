@@ -1,4 +1,5 @@
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td, StatusDot } from "@/components/ui/kit";
+import { LiveStat, LiveDot } from "@/components/live/live-stat";
 import { SOURCES } from "@/lib/data";
 import { fmtUsd } from "@/lib/format";
 import { Icon } from "@/components/icon-map";
@@ -41,7 +42,12 @@ export default function SourcesPage() {
         module={{ name: "PANTHEON · Infrastructure", tone: "accent" }}
         title="Data Sources"
         desc="All PANTHEON data connectors — health status, latency, licensing tier, and blended-source routing rules."
-        right={<Chip tone="pos" dot>{healthyCount} / {SOURCES.length} healthy</Chip>}
+        right={
+          <div className="flex items-center gap-2">
+            <LiveDot />
+            <Chip tone="pos" dot>{healthyCount} / {SOURCES.length} healthy</Chip>
+          </div>
+        }
       />
 
       {/* KPIs */}
@@ -69,7 +75,7 @@ export default function SourcesPage() {
         />
         <KpiCard
           label="MIN LATENCY"
-          value="38 ms"
+          value={<LiveStat value={38} suffix=" ms" decimals={0} vol={0.01} />}
           sub="Binance WS full book depth"
           icon={<Icon name="activity" width={15} height={15} />}
         />

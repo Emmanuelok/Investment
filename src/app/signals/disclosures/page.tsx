@@ -13,6 +13,7 @@ import {
 import { Sparkline, DeltaBars } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { ChevronRight } from "@/components/icons";
+import { LiveDot } from "@/components/live/live-stat";
 import {
   CONGRESS_TRADES,
   INSIDER_TRADES,
@@ -51,6 +52,7 @@ export default function DisclosuresPage() {
         desc="Congressional trading (STOCK Act), Form 4 insider activity, lobbying spend, and contract awards. Point-in-time as-filed — no look-ahead."
         right={
           <div className="flex items-center gap-2">
+            <LiveDot />
             <StatusDot tone="pos" pulse />
             <span className="font-mono text-xs text-dim">Quiver Quant · API Trader tier</span>
             <Link href="/signals" className="btn">
