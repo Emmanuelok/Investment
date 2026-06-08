@@ -6,6 +6,15 @@ import { Bolt, External, Sparkle, ChevronRight, Route } from "@/components/icons
 import { OVERVIEW_KPIS, CANDIDATES, ANOMALIES, FAMILY_COVERAGE } from "@/lib/data";
 import { fmtSigned } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { LiveStat, LiveDot } from "@/components/live/live-stat";
+import type { ComponentProps } from "react";
+
+const LIVE_KPI: Record<string, ComponentProps<typeof LiveStat>> = {
+  "LIVE SIGNALS": { value: 47, decimals: 0, vol: 0.015 },
+  "EVENTS / 24H": { value: 312884, decimals: 0, vol: 0.004 },
+  "PIT ARCHIVE": { value: 38.4, suffix: " TB", decimals: 1, vol: 0.003 },
+  "DATA SPEND / MO": { value: 4200, prefix: "$", decimals: 0, vol: 0.002 },
+};
 
 export default function OverviewPage() {
   return (
@@ -17,6 +26,7 @@ export default function OverviewPage() {
           <p className="mt-1 text-sm text-dim">Cross-signal candidates fused across every family, point-in-time</p>
         </div>
         <div className="flex items-center gap-2">
+          <LiveDot className="mr-1" />
           <button className="btn">
             <External width={15} height={15} />
             Publish to OBSIDIAN / AEGIS
@@ -37,7 +47,7 @@ export default function OverviewPage() {
               <Icon name={k.icon} width={15} height={15} className="text-dim" />
             </div>
             <div className={cn("mt-2.5 font-mono text-2xl leading-none tracking-tight", k.tone === "pos" ? "text-pos" : k.tone === "warn" ? "text-warn" : "text-ink")}>
-              {k.value}
+              {LIVE_KPI[k.label] ? <LiveStat {...LIVE_KPI[k.label]} /> : k.value}
             </div>
             <div className="mt-2 text-xs text-dim">{k.sub}</div>
           </Panel>

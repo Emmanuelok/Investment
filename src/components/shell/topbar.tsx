@@ -1,7 +1,8 @@
-import { Bell, Shield, Warn, Database } from "@/components/icons";
+import { Shield, Warn, Database } from "@/components/icons";
 import { CommandTrigger, LiveClock, ArchiveCounter } from "@/components/shell/client-widgets";
 import { LiveTickerBar } from "@/components/live/live-ticker-bar";
 import { KillSwitchChip } from "@/components/shell/kill-switch";
+import { Notifications } from "@/components/shell/notifications";
 import { utcClock } from "@/lib/format";
 
 export function TopBar() {
@@ -39,10 +40,7 @@ export function TopBar() {
 
         <LiveClock initial={utcClock()} />
 
-        <button className="relative grid h-9 w-9 place-items-center rounded-md border border-line text-muted transition-colors hover:border-line-strong hover:text-ink">
-          <Bell width={16} height={16} />
-          <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-accent" />
-        </button>
+        <Notifications />
       </div>
     </header>
   );
