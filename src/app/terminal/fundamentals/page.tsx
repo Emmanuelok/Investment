@@ -1,5 +1,4 @@
-import { PageHeader, Panel, PanelHeader, Chip, Stat, Th, Td, Ticker } from "@/components/ui/kit";
-import { Sparkline, ProgressBar } from "@/components/ui/viz";
+import { PageHeader, Panel, PanelHeader, Chip, Th, Td, Ticker } from "@/components/ui/kit";
 import { Icon } from "@/components/icon-map";
 import { signClass, fmtSignedPct } from "@/lib/format";
 import { cn } from "@/lib/cn";

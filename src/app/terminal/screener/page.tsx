@@ -2,7 +2,7 @@ import { PageHeader, Panel, PanelHeader, Chip, Th, Td, Ticker, KpiCard } from "@
 import { Sparkline } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { Sparkle } from "@/components/icons";
-import { signClass, fmtSignedPct, fmtNum } from "@/lib/format";
+import { signClass, fmtSignedPct } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import { SCREENER_ROWS, SAVED_SCREENS } from "@/lib/data/obsidian";
 import { priceWalk } from "@/lib/rng";

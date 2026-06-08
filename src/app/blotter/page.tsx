@@ -4,7 +4,7 @@ import {
 } from "@/components/ui/kit";
 import { ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
-import { Shield, Bolt, Book, Flow, Coins } from "@/components/icons";
+import { Shield, Bolt } from "@/components/icons";
 import {
   blotterOrders, blockOrders,
   BLOTTER_KPIS, ORDER_LIFECYCLE,

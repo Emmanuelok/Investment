@@ -1,15 +1,15 @@
 import {
   PageHeader, Panel, PanelHeader, Chip, KpiCard, Stat,
-  Th, Td, Ticker, SectionLabel,
+  Th, Td, Ticker,
 } from "@/components/ui/kit";
-import { ProgressBar, Ring } from "@/components/ui/viz";
+import { ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
-import { Target, Flow, Bolt, Scale, Gauge } from "@/components/icons";
+import { Bolt, Scale } from "@/components/icons";
 import {
   efficientFrontier, PROPOSED_TRADES, CONSTRAINTS, WHATIF_IMPACTS, OPT_KPIS,
   type OptObjective,
 } from "@/lib/data/aegis-exec";
-import { fmtNum, fmtPct, fmtSignedPct, fmtUsdCompact, signClass } from "@/lib/format";
+import { fmtNum, fmtUsdCompact, signClass } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
 export const metadata = { title: "Optimizer & Construction — AEGIS" };
@@ -522,17 +522,5 @@ export default function OptimizerPage() {
         </div>
       </Panel>
     </div>
-  );
-}
-
-/* Extra Th variant used in what-if table */
-function Thm({ children, right }: { children?: React.ReactNode; right?: boolean }) {
-  return (
-    <th className={cn(
-      "select-none border-b border-line px-3 py-2 text-left font-mono text-2xs font-normal uppercase tracking-widest text-dim",
-      right && "text-right",
-    )}>
-      {children}
-    </th>
   );
 }

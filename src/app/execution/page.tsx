@@ -4,7 +4,7 @@ import {
 } from "@/components/ui/kit";
 import { ProgressBar, Sparkline, DeltaBars } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
-import { Shield, Wave, Pulse, Route, Gauge } from "@/components/icons";
+import { Shield, Wave } from "@/components/icons";
 import {
   execAlgos, sorVenues, FIX_SESSIONS, TCA_METRICS, TCA_DECOMP,
   TCA_SERIES, TCA_VWAP_SERIES, EMS_KPIS,

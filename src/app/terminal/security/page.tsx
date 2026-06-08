@@ -2,7 +2,7 @@ import { PageHeader, Panel, PanelHeader, Chip, Stat, Th, Td, Ticker, KpiCard } f
 import { Sparkline, ProgressBar, Ring } from "@/components/ui/viz";
 import { Candles } from "@/components/ui/candles";
 import { Icon } from "@/components/icon-map";
-import { signClass, fmtSignedPct, fmtNum, fmtCompact, fmtPct } from "@/lib/format";
+import { signClass, fmtSignedPct, fmtNum, fmtPct } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import {
   NVDA_CANDLES,
