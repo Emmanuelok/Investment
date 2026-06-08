@@ -1,7 +1,7 @@
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td, StatusDot } from "@/components/ui/kit";
 import { ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
-import { Shield, Database, Check, Clock, Warn } from "@/components/icons";
+import { Shield, Database, Check, Clock } from "@/components/icons";
 import { KillSwitchToggle } from "@/components/atlas/runtime/KillSwitchToggle";
 import { SERVICE_HEALTH, BACKUPS, RUNBOOKS } from "@/lib/data/atlas-runtime";
 import { fmtNum } from "@/lib/format";

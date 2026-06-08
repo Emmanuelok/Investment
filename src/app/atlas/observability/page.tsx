@@ -1,7 +1,7 @@
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td, StatusDot } from "@/components/ui/kit";
 import { Sparkline, MiniBars, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
-import { Activity, Bell, Database, Gauge, Cpu, Clock, Warn, Check } from "@/components/icons";
+import { Activity, Bell, Database, Gauge, Clock, Warn, Check } from "@/components/icons";
 import {
   OBS_SLOS,
   METRIC_CHARTS,
