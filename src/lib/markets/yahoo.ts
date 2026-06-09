@@ -10,7 +10,7 @@ export type Norm = { price: number; prevClose: number; marketState: string; bars
 
 export async function yahooChart(sym: string, range = "3mo", interval = "1d"): Promise<Norm> {
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?range=${range}&interval=${interval}`;
-  const r = await fetch(url, { headers: { "User-Agent": UA, Accept: "application/json" }, next: { revalidate: 30 } });
+  const r = await fetch(url, { headers: { "User-Agent": UA, Accept: "application/json" }, next: { revalidate: 30 }, signal: AbortSignal.timeout(8000) });
   if (!r.ok) throw new Error(`yahoo ${sym} HTTP ${r.status}`);
   const j = (await r.json()) as { chart?: { result?: Array<{ meta?: Record<string, number | string>; timestamp?: number[]; indicators?: { quote?: Array<Record<string, Array<number | null>>> } }> } };
   const res = j?.chart?.result?.[0];
@@ -63,7 +63,7 @@ export type QuoteRow = {
 export async function batchQuotes(symbols: string[], names: Record<string, string> = {}): Promise<{ rows: QuoteRow[]; source: string }> {
   try {
     const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols.map(encodeURIComponent).join(",")}`;
-    const r = await fetch(url, { headers: { "User-Agent": UA, Accept: "application/json" }, next: { revalidate: 30 } });
+    const r = await fetch(url, { headers: { "User-Agent": UA, Accept: "application/json" }, next: { revalidate: 30 }, signal: AbortSignal.timeout(8000) });
     if (r.ok) {
       const j = (await r.json()) as { quoteResponse?: { result?: Array<Record<string, number | string>> } };
       const arr = j?.quoteResponse?.result;

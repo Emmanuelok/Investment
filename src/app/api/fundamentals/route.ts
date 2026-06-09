@@ -12,8 +12,8 @@ const pct = (v: unknown): number | undefined => { const n = num(v); return n ===
 async function finnhub(sym: string): Promise<Fundamentals> {
   const key = process.env.FINNHUB_API_KEY;
   const [pR, mR] = await Promise.all([
-    fetch(`https://finnhub.io/api/v1/stock/profile2?symbol=${sym}&token=${key}`, { next: { revalidate: 300 } }),
-    fetch(`https://finnhub.io/api/v1/stock/metric?symbol=${sym}&metric=all&token=${key}`, { next: { revalidate: 300 } }),
+    fetch(`https://finnhub.io/api/v1/stock/profile2?symbol=${sym}&token=${key}`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) }),
+    fetch(`https://finnhub.io/api/v1/stock/metric?symbol=${sym}&metric=all&token=${key}`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) }),
   ]);
   if (!pR.ok || !mR.ok) throw new Error(`finnhub ${pR.status}/${mR.status}`);
   const prof = (await pR.json()) as Record<string, unknown>;
@@ -35,8 +35,8 @@ async function finnhub(sym: string): Promise<Fundamentals> {
 async function fmp(sym: string): Promise<Fundamentals> {
   const key = process.env.FMP_API_KEY;
   const [pR, rR] = await Promise.all([
-    fetch(`https://financialmodelingprep.com/api/v3/profile/${sym}?apikey=${key}`, { next: { revalidate: 300 } }),
-    fetch(`https://financialmodelingprep.com/api/v3/ratios-ttm/${sym}?apikey=${key}`, { next: { revalidate: 300 } }),
+    fetch(`https://financialmodelingprep.com/api/v3/profile/${sym}?apikey=${key}`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) }),
+    fetch(`https://financialmodelingprep.com/api/v3/ratios-ttm/${sym}?apikey=${key}`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) }),
   ]);
   if (!pR.ok) throw new Error(`fmp ${pR.status}`);
   const prof = ((await pR.json()) as Record<string, unknown>[])[0];
@@ -55,12 +55,12 @@ async function fmp(sym: string): Promise<Fundamentals> {
 
 /* ── Yahoo quoteSummary (no key, needs crumb) ────────────────────────────── */
 async function yahooCrumb(): Promise<{ cookie: string; crumb: string }> {
-  const r1 = await fetch("https://fc.yahoo.com", { headers: { "User-Agent": UA } });
+  const r1 = await fetch("https://fc.yahoo.com", { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(8000) });
   const h = r1.headers as Headers & { getSetCookie?: () => string[] };
   const raw = h.getSetCookie?.() ?? [r1.headers.get("set-cookie") ?? ""];
   const cookie = raw.map((c) => c.split(";")[0]).filter(Boolean).join("; ");
   if (!cookie) throw new Error("no cookie");
-  const r2 = await fetch("https://query1.finance.yahoo.com/v1/test/getcrumb", { headers: { "User-Agent": UA, Cookie: cookie, Accept: "text/plain" } });
+  const r2 = await fetch("https://query1.finance.yahoo.com/v1/test/getcrumb", { headers: { "User-Agent": UA, Cookie: cookie, Accept: "text/plain" }, signal: AbortSignal.timeout(8000) });
   const crumb = (await r2.text()).trim();
   if (!crumb || crumb.length > 40 || crumb.includes("<")) throw new Error("bad crumb");
   return { cookie, crumb };
@@ -70,7 +70,7 @@ type YSec = Record<string, { raw?: number } | undefined> & { longName?: string; 
 async function yahooFund(sym: string): Promise<Fundamentals> {
   const { cookie, crumb } = await yahooCrumb();
   const modules = "price,summaryDetail,defaultKeyStatistics,financialData,assetProfile";
-  const r = await fetch(`https://query1.finance.yahoo.com/v10/finance/quoteSummary/${sym}?modules=${modules}&crumb=${encodeURIComponent(crumb)}`, { headers: { "User-Agent": UA, Cookie: cookie }, next: { revalidate: 300 } });
+  const r = await fetch(`https://query1.finance.yahoo.com/v10/finance/quoteSummary/${sym}?modules=${modules}&crumb=${encodeURIComponent(crumb)}`, { headers: { "User-Agent": UA, Cookie: cookie }, next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
   if (!r.ok) throw new Error(`quoteSummary ${r.status}`);
   const res = ((await r.json()) as { quoteSummary?: { result?: Array<Record<string, YSec>> } })?.quoteSummary?.result?.[0];
   if (!res) throw new Error("quoteSummary empty");
