@@ -113,8 +113,8 @@ export function Notifications() {
               })
             )}
           </div>
-          <a href="/terminal/news" className="flex items-center justify-center gap-1 border-t border-line px-3 py-2 font-mono text-2xs uppercase tracking-wider text-accent transition-colors hover:bg-accent/10">
-            <Dot width={6} height={6} /> View all in news &amp; headlines
+          <a href="/signals/events" className="flex items-center justify-center gap-1 border-t border-line px-3 py-2 font-mono text-2xs uppercase tracking-wider text-accent transition-colors hover:bg-accent/10">
+            <Dot width={6} height={6} /> View all in event stream
           </a>
         </div>
       ) : null}

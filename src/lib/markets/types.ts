@@ -3,7 +3,7 @@ import type { IndexQuote, SectorPerf, MoverRow, FxRow, RateRow, CryptoRow } from
 
 export type MarketsLive = {
   live: true;
-  source: string;
+  source: "yahoo" | "twelvedata";
   asOf: string;
   marketState: string;
   indices: IndexQuote[];

@@ -46,14 +46,14 @@ export const ANOMALIES = [
     head: "Abnormal Congressional buying",
     body: "in defense names — 3 disclosures clustered in 5 sessions (LMT, RTX-class, NOC-class).",
     cta: "view disclosures",
-    href: "/terminal/filings",
+    href: "/signals/disclosures",
   },
   {
     tone: "warn" as const,
     head: "Novelty spike",
     body: "on NVDA supply-chain thread (0.83) — incremental vs. trailing 30d corpus, not already-priced.",
     cta: "open event",
-    href: "/terminal/news",
+    href: "/signals",
   },
   {
     tone: "neg" as const,
