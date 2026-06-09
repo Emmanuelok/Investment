@@ -1,10 +1,10 @@
-import { PageHeader, Panel, PanelHeader, Chip, Stat, Th, Td, Ticker, KpiCard } from "@/components/ui/kit";
+import { PageHeader, Panel, PanelHeader, Chip, Stat, Th, Td, Ticker } from "@/components/ui/kit";
 import { LiveCandleChart } from "@/components/markets/live-candle-chart";
+import { LiveFundamentals } from "@/components/markets/live-fundamentals";
 import { LiveStat } from "@/components/live/live-stat";
-import { Sparkline, ProgressBar, Ring } from "@/components/ui/viz";
+import { ProgressBar, Ring } from "@/components/ui/viz";
 import { Candles } from "@/components/ui/candles";
-import { Icon } from "@/components/icon-map";
-import { signClass, fmtSignedPct, fmtNum, fmtPct } from "@/lib/format";
+import { signClass, fmtSignedPct, fmtPct } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import {
   NVDA_CANDLES,
@@ -12,15 +12,11 @@ import {
   NVDA_NEWS,
   NVDA_PEERS,
 } from "@/lib/data/obsidian";
-import { priceWalk } from "@/lib/rng";
 import { SecurityChart } from "@/components/charts/security-chart";
 
 export const metadata = { title: "NVDA Security DES — OBSIDIAN Terminal" };
 
-const NVDA_SPARK = priceWalk("NVDA-spark-des", 60, 82, 0.028, 0.0018);
-
 export default function SecurityDesPage() {
-  const lastPrice = 128.47;
   const chgPct = 4.72;
   const analystBull = 38;
   const analystHold = 8;
@@ -43,18 +39,9 @@ export default function SecurityDesPage() {
 
       <LiveCandleChart symbol="NVDA" title="NVDA — Live" />
 
-      <SecurityChart seed="NVDA-des" base={128} vol={0.028} label="NVDA" />
+      <LiveFundamentals symbol="NVDA" />
 
-      {/* Header price block */}
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">
-        <KpiCard label="LAST PRICE" value={`$${fmtNum(lastPrice)}`} tone="pos" sub={`+$${(lastPrice * chgPct / 100).toFixed(2)} today`} icon={<Icon name="candle" width={14} height={14} />} className="xl:col-span-2" />
-        <KpiCard label="MKT CAP" value={<LiveStat value={3.15} prefix="$" suffix="T" decimals={2} vol={0.004} />} sub="Fully diluted" icon={<Icon name="database" width={14} height={14} />} />
-        <KpiCard label="P/E (TTM)" value={<LiveStat value={43.2} suffix="x" decimals={1} vol={0.006} />} sub="Fwd P/E 37.4x" icon={<Icon name="scale" width={14} height={14} />} />
-        <KpiCard label="EPS (TTM)" value={<LiveStat value={29.76} prefix="$" decimals={2} vol={0.004} />} sub="FY2025E $41.8" tone="pos" icon={<Icon name="bolt" width={14} height={14} />} />
-        <KpiCard label="DIV YIELD" value={<LiveStat value={0.03} suffix="%" decimals={2} vol={0.02} />} sub="$0.04/qtr" icon={<Icon name="coins" width={14} height={14} />} />
-        <KpiCard label="BETA (1Y)" value={<LiveStat value={1.84} decimals={2} vol={0.004} />} sub="vs S&P 500" tone="warn" icon={<Icon name="activity" width={14} height={14} />} />
-        <KpiCard label="SHORT INT" value={<LiveStat value={1.2} suffix="%" decimals={1} vol={0.006} />} sub="2.4D to cover" icon={<Icon name="target" width={14} height={14} />} />
-      </div>
+      <SecurityChart seed="NVDA-des" base={128} vol={0.028} label="NVDA" />
 
       {/* Price chart + company description */}
       <div className="grid gap-4 xl:grid-cols-3">
