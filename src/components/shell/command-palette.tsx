@@ -12,10 +12,9 @@ type Cmd = { label: string; href: string; icon: string; group: string; tag?: str
 const FLAT: Cmd[] = NAV.flatMap((g) => g.items.map((it) => ({ ...it, group: g.label })));
 
 const QUICK: Cmd[] = [
-  { label: "Ask ATHENA: why did VaR move today?", href: "/copilot", icon: "sparkle", group: "Copilot" },
-  { label: "Run backtest · time-series momentum", href: "/quant/backtest", icon: "bars", group: "Action" },
-  { label: "Open BTC order-flow heatmap", href: "/charts/orderflow", icon: "flow", group: "Action" },
+  { label: "Open BTC chart", href: "/charts", icon: "candle", group: "Action" },
   { label: "Screen: semis < 20x fwd P/E, rev > 20%", href: "/terminal/screener", icon: "filter", group: "Action" },
+  { label: "Latest filings & 13F activity", href: "/terminal/filings", icon: "doc", group: "Action" },
 ];
 
 export function CommandPalette() {
