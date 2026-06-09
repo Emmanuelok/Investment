@@ -5,6 +5,7 @@ import { PageHeader, Panel, PanelHeader, Chip, Stat, Th, Td, Ticker } from "@/co
 import { Sparkline, Ring, ProgressBar } from "@/components/ui/viz";
 import { Candles } from "@/components/ui/candles";
 import { Icon } from "@/components/icon-map";
+import { MarketIntel } from "@/components/engine/market-intel";
 import { signClass, fmtNum, fmtSignedPct, fmtBps } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import { MARKET_INDICES, SPY_CANDLES, SECTORS, TOP_GAINERS, TOP_LOSERS, FX_RATES, RATES_TABLE, CRYPTO_TABLE } from "@/lib/data/obsidian";
@@ -99,6 +100,8 @@ export function MarketsOverview() {
           ))}
         </div>
       </div>
+
+      <MarketIntel />
 
       {/* Featured chart + breadth */}
       <div className="grid gap-4 lg:grid-cols-3">

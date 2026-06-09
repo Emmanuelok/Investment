@@ -9,6 +9,7 @@ import { SCREENER_ROWS, SAVED_SCREENS } from "@/lib/data/obsidian";
 import { priceWalk } from "@/lib/rng";
 import { ScreenerInteractive } from "@/components/terminal/screener-interactive";
 import { LiveScreener } from "@/components/markets/live-screener";
+import { FactorScan } from "@/components/engine/factor-scan";
 
 export const metadata = { title: "Screener / Scanner — OBSIDIAN Terminal" };
 
@@ -36,6 +37,8 @@ export default function ScreenerPage() {
       />
 
       <LiveScreener />
+
+      <FactorScan />
 
       <ScreenerInteractive />
 
