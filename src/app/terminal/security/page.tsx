@@ -2,6 +2,7 @@ import { PageHeader, Panel, PanelHeader, Chip, Stat, Th, Td, Ticker } from "@/co
 import { LiveCandleChart } from "@/components/markets/live-candle-chart";
 import { LiveFundamentals } from "@/components/markets/live-fundamentals";
 import { TechPanel } from "@/components/engine/tech-panel";
+import { SeasonalityPanel } from "@/components/engine/seasonality-panel";
 import { LiveStat } from "@/components/live/live-stat";
 import { ProgressBar, Ring } from "@/components/ui/viz";
 import { Candles } from "@/components/ui/candles";
@@ -43,6 +44,8 @@ export default function SecurityDesPage() {
       <LiveFundamentals symbol="NVDA" />
 
       <TechPanel symbol="NVDA" />
+
+      <SeasonalityPanel symbol="NVDA" />
 
       <SecurityChart seed="NVDA-des" base={128} vol={0.028} label="NVDA" />
 

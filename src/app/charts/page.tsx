@@ -18,6 +18,7 @@ import { fmtUsd, fmtSignedPct, fmtCompact, signClass } from "@/lib/format";
 import { priceWalk } from "@/lib/rng";
 import { LiveChartPanel } from "@/components/live/live-chart-panel";
 import { TechPanel } from "@/components/engine/tech-panel";
+import { SeasonalityPanel } from "@/components/engine/seasonality-panel";
 
 export const metadata = { title: "HELIOS — Charting Engine" };
 
@@ -59,6 +60,8 @@ export default function ChartsPage() {
       <LiveCandleChart title="Live Equity Chart" presets={["SPY", "NVDA", "AAPL", "MSFT", "TSLA", "AMD"]} />
 
       <TechPanel symbol="SPY" />
+
+      <SeasonalityPanel symbol="SPY" />
 
       <LiveChartPanel />
 
