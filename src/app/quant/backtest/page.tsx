@@ -12,7 +12,7 @@ import {
 import { fmtNum, fmtPct, fmtSignedPct, fmtBps, fmtInt } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import { priceWalk } from "@/lib/rng";
-import { BacktestLab } from "@/components/quant/backtest-lab";
+import { BacktestLab } from "@/components/engine/backtest-lab";
 
 export const metadata = { title: "KEPLER — Backtest Engine" };
 
@@ -35,13 +35,6 @@ const monthlyPnl = priceWalk("kepler-monthly-pnl", 24, 0, 0.03, 0.012).map((v, i
 export default function BacktestPage() {
   return (
     <div className="space-y-5">
-      <div className="panel p-4">
-        <div className="mb-3 flex flex-wrap items-center gap-2">
-          <span className="chip chip-ai">Interactive · runs in your browser</span>
-          <span className="section-label">Backtest Lab — pick a strategy, tune parameters, watch the overfitting diagnostics react</span>
-        </div>
-        <BacktestLab />
-      </div>
       <PageHeader
         module={{ name: "KEPLER · Quant Lab", tone: "ai" }}
         title="Backtest Engine"
@@ -59,6 +52,8 @@ export default function BacktestPage() {
           </div>
         }
       />
+
+      <BacktestLab />
 
       {/* KPI Deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-5">
