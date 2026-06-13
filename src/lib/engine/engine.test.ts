@@ -4,6 +4,7 @@ import { classifyRegime } from "./regime";
 import { factorScores } from "./score";
 import { evaluateRules, type Rule } from "./alerts";
 import { deriveInsights } from "./insights";
+import { detectPatterns } from "./patterns";
 import { candleSeries, type Candle } from "@/lib/rng";
 
 const up: number[] = Array.from({ length: 120 }, (_, i) => 100 * Math.pow(1.005, i));
@@ -81,6 +82,31 @@ describe("regime + scores + insights", () => {
     expect(insights.length).toBeGreaterThan(2);
     for (const i of insights) expect(i.evidence.length).toBeGreaterThan(0);
     for (let k = 1; k < insights.length; k++) expect(Math.abs(insights[k - 1].score)).toBeGreaterThanOrEqual(Math.abs(insights[k].score));
+  });
+});
+
+describe("pattern detection", () => {
+  it("flags a bullish engulfing", () => {
+    const c: Candle[] = [
+      ...Array.from({ length: 6 }, (_, i) => ({ o: 100 - i, h: 101 - i, l: 98 - i, c: 99 - i, v: 1 })), // downtrend
+      { o: 94, h: 94.5, l: 92, c: 92.5, v: 1 }, // red
+      { o: 92, h: 97, l: 91.8, c: 96.5, v: 1 }, // green engulfs prior
+    ];
+    const names = detectPatterns(c).map((p) => p.name);
+    expect(names).toContain("Bullish Engulfing");
+  });
+  it("flags a gap up and dedupes by name", () => {
+    const c: Candle[] = [
+      { o: 100, h: 101, l: 99, c: 100, v: 1 },
+      { o: 105, h: 106, l: 104, c: 105.5, v: 1 }, // low 104 > prior high 101 → gap up
+    ];
+    const ps = detectPatterns(c);
+    expect(ps.some((p) => p.name === "Gap Up")).toBe(true);
+    expect(new Set(ps.map((p) => p.name)).size).toBe(ps.length);
+  });
+  it("doji has small body", () => {
+    const c: Candle[] = [{ o: 100, h: 105, l: 95, c: 100.1, v: 1 }, { o: 100, h: 105, l: 95, c: 100.05, v: 1 }];
+    expect(detectPatterns(c).some((p) => p.name === "Doji")).toBe(true);
   });
 });
 

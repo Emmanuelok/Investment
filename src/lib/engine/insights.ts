@@ -5,6 +5,7 @@
 import type { Candle } from "@/lib/rng";
 import { rsi, macd, bollinger, atr, realizedVol, percentileRank, swingLevels, streak, sma, maxDrawdown } from "./indicators";
 import { classifyRegime, type Regime } from "./regime";
+import { detectPatterns } from "./patterns";
 
 export type Insight = {
   id: string;
@@ -81,6 +82,12 @@ export function deriveInsights(sym: string, candles: Candle[]): { insights: Insi
   // realized vol context
   const rv = realizedVol(closes);
   if (Number.isFinite(rv[n - 1])) out.push({ id: "rv", tone: "info", title: `Realized vol ${f(rv[n - 1], 1)}%`, detail: `20-day annualized volatility sits in the ${regime.volRegime.toLowerCase()} regime (${regime.volPercentile}th percentile of the window).`, evidence: [`σ₂₀ ${f(rv[n - 1], 1)}% · ${regime.volPercentile}th pct`], score: 10 });
+
+  // candlestick / price-action patterns on the most recent bars
+  for (const pat of detectPatterns(candles, 3)) {
+    const recency = pat.barsAgo === 0 ? "latest bar" : `${pat.barsAgo} bar${pat.barsAgo > 1 ? "s" : ""} ago`;
+    out.push({ id: `pat-${pat.name}`, tone: pat.tone, title: pat.name, detail: pat.detail, evidence: [`detected ${recency}`], score: (pat.tone === "pos" ? 28 : pat.tone === "neg" ? -28 : 14) - pat.barsAgo * 4 });
+  }
 
   // levels
   const lv = swingLevels(candles);
