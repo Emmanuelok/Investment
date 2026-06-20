@@ -6,7 +6,7 @@ series, a covariance matrix, or a closed-form model. When a live market feed is
 reachable the engines run on real data; otherwise they run the identical math on
 a deterministic seeded series and say so honestly (`ENGINE · DEMO DATA`).
 
-- **Pure math, fully tested** — `src/lib/engine/*`, **143 unit tests** (`*.test.ts`).
+- **Pure math, fully tested** — `src/lib/engine/*`, **184 unit tests** (`*.test.ts`).
 - **Server routes** — `src/app/api/engine/*` fetch real candles/series and run the engines.
 - **Interactive UIs** — `src/components/engine/*`, each with an honest `LIVE / DEMO` badge.
 
@@ -51,6 +51,12 @@ price/series feed ──▶ /api/engine/* (Node route) ──▶ engine lib (pur
 | `options-strategy.ts` | Multi-leg options payoff/value curves, net Greeks, breakevens, 9 presets | `analyzeStrategy, presetLegs` |
 | `factor-attribution.ts` | Multivariate OLS: alpha + market/size/value/momentum/quality/low-vol betas | `attributeReturns, multiRegress` |
 | `rrg.ts` | Relative-Rotation-Graph — JdK RS-Ratio/Momentum + quadrant | `computeRRG, quadrantOf` |
+| `yield-curve.ts` | Treasury curve slope (2s10s/3m10s), curvature, level, implied forwards, shape classification | `analyzeCurve, forwardRate` |
+| `insider.ts` | SEC Form 4 parser — transaction classification (P/S/A/M/F/G/C) + net buy/sell summary | `parseForm4, classifyCode, summarizeInsider` |
+| `merton.ts` | Merton (1974) structural credit model — distance-to-default, default prob, credit spread, grade | `mertonModel, equityFromAsset, creditGrade, annualizedVol` |
+| `nowcast.ts` | Macro nowcast — z-scored FRED indicators → Growth/Inflation/Labor composites + business-cycle quadrant | `buildNowcast, zLast, meanStd` |
+| `efficiency.ts` | Market efficiency — Hurst R/S, Lo-MacKinlay variance ratios, autocorrelation → trend/mean-revert vote | `analyzeEfficiency, hurstRS, varianceRatio, autocorr` |
+| `dividend-safety.ts` | Dividend safety — FCF coverage, payout ratio, net-debt/EBITDA → 0-100 score + flags | `dividendSafety` |
 
 All engines are deterministic: same input → same output. The Monte-Carlo engine
 is seeded, so even the stochastic simulation is reproducible.
@@ -81,7 +87,13 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/api/engine/stress` | Portfolio crisis-scenario stress test | `?holdings=SPY:0.5,TLT:0.3,GLD:0.2` |
 | `/api/engine/factor-attribution` | Factor decomposition of returns (OLS on ETF proxies) | `?symbol=NVDA` |
 | `/api/engine/rrg` | Sector-rotation relative-rotation graph | `?symbols=XLK,XLF&benchmark=SPY` |
+| `/api/engine/yield-curve` | Treasury curve slope/curvature/forwards/shape (FRED) | — |
+| `/api/engine/merton` | Distance-to-default credit risk (Finnhub + SEC + FRED) | `?symbol=NVDA` |
+| `/api/engine/nowcast` | Macro nowcast business-cycle quadrant (13 FRED series) | — |
+| `/api/engine/efficiency` | Hurst / variance-ratio trend vs mean-reversion (Stooq) | `?symbol=SPY` |
+| `/api/engine/dividend-safety` | FCF-coverage dividend-safety score (SEC XBRL) | `?symbol=AAPL` |
 | `/api/edgar/financials` | Real SEC XBRL financials + Piotroski/Altman/grade | `?symbol=AAPL` |
+| `/api/edgar/insider` | Real SEC Form 4 insider transactions + net signal | `?symbol=NVDA` |
 
 > Bonds & position-sizing are pure-math (no feed) and run entirely client-side — no route needed.
 
@@ -94,10 +106,10 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/` (home) | **Intelligence Briefing** — cross-engine fusion (regime + macro + factor leaders + anomalies + composite risk-posture gauge) |
 | `/terminal` | Market Intelligence (regime + real sector breadth + insights) |
 | `/terminal/screener` | Multi-Factor Scan |
-| `/terminal/security` | Tech Panel + Seasonality + **Fundamental Quality** (Piotroski/Altman/earnings/Beneish/grade) |
-| `/charts` | Tech Panel + Seasonality + **Sector Rotation (RRG)** |
+| `/terminal/security` | Tech Panel + Seasonality + **Fundamental Quality** (Piotroski/Altman/earnings/Beneish/grade) + **Insider Activity** (Form 4) + **Credit Risk** (Merton DD) |
+| `/charts` | Tech Panel + Seasonality + **Market Efficiency** (Hurst/VR) + **Sector Rotation (RRG)** |
 | `/quant` | **DCF Valuation** (intrinsic value + sensitivity) |
-| `/terminal/economics` | Macro Regime nowcast |
+| `/terminal/economics` | Macro Regime nowcast + **Treasury Yield Curve** + **Macro Nowcast** (cycle quadrant) |
 | `/signals` | Anomaly Scanner + Trend & RS Scanner |
 | `/quant/backtest` | Strategy Backtest Lab |
 | `/quant/strategies` | Options Pricer + Pairs/Stat-Arb + **Strategy Builder** (multi-leg) |
@@ -131,7 +143,7 @@ exactly which feed was unreachable.
 ## Testing
 
 ```bash
-npm test          # 143 engine + quant unit tests
+npm test          # 184 engine + quant unit tests
 npm run build     # typecheck + production build
 ```
 
