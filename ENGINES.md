@@ -66,6 +66,9 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/api/engine/anomaly` | Market-wide anomaly scan | `?symbols=SPY,QQQ,NVDA` |
 | `/api/engine/macro` | Macro regime + recession nowcast (FRED) | — |
 | `/api/engine/optimizer` | All 4 construction schemes over real covariance | `?symbols=SPY,QQQ,TLT,GLD` |
+| `/api/engine/riskmetrics` | Rolling Sharpe/vol/beta + drawdown profile | `?symbol=SPY&window=63` |
+
+> Bonds & position-sizing are pure-math (no feed) and run entirely client-side — no route needed.
 
 ---
 
