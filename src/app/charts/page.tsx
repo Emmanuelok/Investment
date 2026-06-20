@@ -19,6 +19,7 @@ import { priceWalk } from "@/lib/rng";
 import { LiveChartPanel } from "@/components/live/live-chart-panel";
 import { TechPanel } from "@/components/engine/tech-panel";
 import { SeasonalityPanel } from "@/components/engine/seasonality-panel";
+import { SectorRotation } from "@/components/engine/sector-rotation";
 
 export const metadata = { title: "HELIOS — Charting Engine" };
 
@@ -62,6 +63,8 @@ export default function ChartsPage() {
       <TechPanel symbol="SPY" />
 
       <SeasonalityPanel symbol="SPY" />
+
+      <SectorRotation />
 
       <LiveChartPanel />
 
