@@ -27,6 +27,19 @@ export async function finnhubQuote(sym: string): Promise<Quote> {
   return { price: j.c, prevClose: pc, open: j.o ?? j.c, high: j.h ?? j.c, low: j.l ?? j.c, chg: j.d ?? j.c - pc, chgPct: j.dp ?? (pc ? (j.c / pc - 1) * 100 : 0) };
 }
 
+/* ── Finnhub company profile (market cap / shares / sector) ──────────────── */
+export type Profile = { name: string; marketCap: number; shares: number; industry: string; currency: string };
+export async function finnhubProfile(sym: string): Promise<Profile> {
+  const key = process.env.FINNHUB_API_KEY;
+  if (!key) throw new Error("no FINNHUB_API_KEY");
+  const r = await fetch(`${FH}/stock/profile2?symbol=${encodeURIComponent(sym)}&token=${key}`, { next: { revalidate: 86400 }, signal: AbortSignal.timeout(8000) });
+  if (!r.ok) throw new Error(`finnhub profile ${sym} HTTP ${r.status}`);
+  const j = (await r.json()) as { name?: string; marketCapitalization?: number; shareOutstanding?: number; finnhubIndustry?: string; currency?: string };
+  if (!j.marketCapitalization) throw new Error(`finnhub profile ${sym} empty`);
+  // Finnhub reports market cap and shares in MILLIONS.
+  return { name: j.name ?? sym, marketCap: j.marketCapitalization * 1e6, shares: (j.shareOutstanding ?? 0) * 1e6, industry: j.finnhubIndustry ?? "", currency: j.currency ?? "USD" };
+}
+
 /* ── Stooq daily candles (no key) ────────────────────────────────────────── */
 const STOOQ_MAP: Record<string, string> = { "^VIX": "^vix", "^GDAXI": "^dax", "^N225": "^nkx", "^HSI": "^hsi", "^GSPC": "^spx", "^IXIC": "^ndq", "^DJI": "^dji", "^SKEW": "^skew" };
 function stooqSym(sym: string): string {
