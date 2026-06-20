@@ -78,6 +78,15 @@ export async function fredLatest(id: string): Promise<{ value: number; prev: num
   return { value: +rows[rows.length - 1][1], prev: +rows[rows.length - 2][1] };
 }
 
+/** FRED series — the last `n` observations (date + value), no key. */
+export async function fredSeries(id: string, n = 24): Promise<{ date: string; value: number }[]> {
+  const r = await fetch(`https://fred.stlouisfed.org/graph/fredgraph.csv?id=${id}`, { headers: { "User-Agent": UA }, next: { revalidate: 3600 }, signal: AbortSignal.timeout(8000) });
+  if (!r.ok) throw new Error(`fred ${id} HTTP ${r.status}`);
+  const rows = (await r.text()).trim().split("\n").slice(1).map((l) => l.split(",")).filter((p) => p[1] && p[1] !== ".");
+  if (rows.length < 2) throw new Error(`fred ${id} empty`);
+  return rows.slice(-n).map((p) => ({ date: p[0], value: +p[1] }));
+}
+
 /* ── Finnhub general market news ─────────────────────────────────────────── */
 export type FhNews = { title: string; link: string; source: string; ts: string; tickers: string[] };
 export async function finnhubNews(category = "general"): Promise<FhNews[]> {
