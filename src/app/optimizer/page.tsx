@@ -12,6 +12,7 @@ import {
 } from "@/lib/data/aegis-exec";
 import { fmtNum, fmtUsdCompact, signClass } from "@/lib/format";
 import { OptimizerLab } from "@/components/quant/optimizer-lab";
+import { OptimizerEngine } from "@/components/engine/optimizer-engine";
 import { cn } from "@/lib/cn";
 
 export const metadata = { title: "Optimizer & Construction — AEGIS" };
@@ -306,6 +307,8 @@ export default function OptimizerPage() {
           </div>
         }
       />
+
+      <OptimizerEngine />
 
       <div className="panel p-4">
         <div className="mb-3 flex flex-wrap items-center gap-2">
