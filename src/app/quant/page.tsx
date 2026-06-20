@@ -9,6 +9,7 @@ import {
 } from "@/lib/data/kepler";
 import { fmtNum, fmtPct, signClass } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { DcfValuation } from "@/components/engine/dcf-valuation";
 
 export const metadata = { title: "KEPLER — Research Environment" };
 
@@ -49,6 +50,8 @@ export default function QuantResearchPage() {
           </div>
         }
       />
+
+      <DcfValuation />
 
       {/* PIT Guarantee Callout */}
       <div className="relative overflow-hidden rounded-md border border-accent/30 bg-accent/5 px-4 py-3.5">
