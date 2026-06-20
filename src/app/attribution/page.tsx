@@ -8,6 +8,7 @@ import {
 } from "@/lib/data/aegis-risk";
 import { fmtNum, fmtPct, fmtSignedPct, fmtBps, signClass } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { RiskAnalytics } from "@/components/engine/risk-analytics";
 
 export const metadata = { title: "Performance & Attribution — AEGIS" };
 
@@ -68,6 +69,8 @@ export default function AttributionPage() {
           </div>
         }
       />
+
+      <RiskAnalytics />
 
       {/* KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
