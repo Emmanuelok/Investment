@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Panel, PanelHeader, Chip, Stat } from "@/components/ui/kit";
 import { cn } from "@/lib/cn";
 import { candleSeries, type Candle } from "@/lib/rng";
@@ -45,7 +45,7 @@ function posture(regime: Regime, recessionRisk: number, advancing: number): numb
 }
 
 export function IntelBriefing() {
-  const base = localBrief();
+  const base = useMemo(localBrief, []);
   const [regime, setRegime] = useState<Regime>(base.regime);
   const [macro, setMacro] = useState<MacroReport>(base.macro);
   const [advancing, setAdvancing] = useState(base.advancing);
