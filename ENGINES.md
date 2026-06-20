@@ -6,7 +6,7 @@ series, a covariance matrix, or a closed-form model. When a live market feed is
 reachable the engines run on real data; otherwise they run the identical math on
 a deterministic seeded series and say so honestly (`ENGINE · DEMO DATA`).
 
-- **Pure math, fully tested** — `src/lib/engine/*`, **88 unit tests** (`*.test.ts`).
+- **Pure math, fully tested** — `src/lib/engine/*`, **102 unit tests** (`*.test.ts`).
 - **Server routes** — `src/app/api/engine/*` fetch real candles/series and run the engines.
 - **Interactive UIs** — `src/components/engine/*`, each with an honest `LIVE / DEMO` badge.
 
@@ -41,6 +41,8 @@ price/series feed ──▶ /api/engine/* (Node route) ──▶ engine lib (pur
 | `riskmetrics.ts` | Rolling Sharpe/vol/beta + drawdown profile (underwater, Ulcer index, episodes) | `rollingMetrics, drawdownAnalytics` |
 | `bonds.ts` | Bond price, YTM, Macaulay/modified duration, convexity, DV01 (no feed) | `analyzeBond, yieldToMaturity, priceChangeForBpShift` |
 | `sizing.ts` | Kelly, expectancy, risk-of-ruin, stop-based share sizing (no feed) | `kellyFraction, expectancy, riskOfRuin, positionSize` |
+| `fundamental-score.ts` | Piotroski F-Score, Altman Z-Score, composite quality grade | `piotroskiFScore, altmanZScore, qualityGrade` |
+| `dcf.ts` | Two-stage DCF intrinsic value + sensitivity grid (no feed) | `dcf, dcfSensitivity` |
 
 All engines are deterministic: same input → same output. The Monte-Carlo engine
 is seeded, so even the stochastic simulation is reproducible.
@@ -67,6 +69,7 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/api/engine/macro` | Macro regime + recession nowcast (FRED) | — |
 | `/api/engine/optimizer` | All 4 construction schemes over real covariance | `?symbols=SPY,QQQ,TLT,GLD` |
 | `/api/engine/riskmetrics` | Rolling Sharpe/vol/beta + drawdown profile | `?symbol=SPY&window=63` |
+| `/api/edgar/financials` | Real SEC XBRL financials + Piotroski/Altman/grade | `?symbol=AAPL` |
 
 > Bonds & position-sizing are pure-math (no feed) and run entirely client-side — no route needed.
 
@@ -79,7 +82,9 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/` (home) | **Intelligence Briefing** — cross-engine fusion (regime + macro + factor leaders + anomalies + composite risk-posture gauge) |
 | `/terminal` | Market Intelligence (regime + real sector breadth + insights) |
 | `/terminal/screener` | Multi-Factor Scan |
-| `/terminal/security`, `/charts` | Tech Panel (regime, RSI gauge, pattern-aware insights) + Seasonality |
+| `/terminal/security` | Tech Panel + Seasonality + **Fundamental Quality** (Piotroski/Altman/grade) |
+| `/charts` | Tech Panel + Seasonality |
+| `/quant` | **DCF Valuation** (intrinsic value + sensitivity) |
 | `/terminal/economics` | Macro Regime nowcast |
 | `/signals` | Anomaly Scanner |
 | `/quant/backtest` | Strategy Backtest Lab |
@@ -114,7 +119,7 @@ exactly which feed was unreachable.
 ## Testing
 
 ```bash
-npm test          # 88 engine + quant unit tests
+npm test          # 102 engine + quant unit tests
 npm run build     # typecheck + production build
 ```
 
