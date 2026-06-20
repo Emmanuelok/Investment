@@ -12,6 +12,7 @@ import {
   type Altman,
   type QualityGrade,
 } from "@/lib/engine/fundamental-score";
+import { earningsQuality, type EarningsQuality } from "@/lib/engine/earnings-quality";
 import { cn } from "@/lib/cn";
 
 /* ── Types ─────────────────────────────────────────────────────────────────── */
@@ -30,6 +31,7 @@ interface FinancialsLive {
   piotroski: Piotroski;
   altman: Altman;
   quality: QualityGrade;
+  earnings: EarningsQuality;
 }
 type FinancialsResponse = FinancialsLive | { live: false };
 
@@ -40,6 +42,7 @@ interface ViewModel {
   piotroski: Piotroski;
   altman: Altman;
   quality: QualityGrade;
+  earnings: EarningsQuality;
 }
 
 /* ── Formatting ────────────────────────────────────────────────────────────── */
@@ -87,7 +90,8 @@ function demoModel(): ViewModel {
     revenueGrowth: (cur.revenue! / prior.revenue! - 1) * 100,
     debtToEquity: (cur.totalLiabilities! / cur.stockholdersEquity!) * 100,
   });
-  return { name: "NVIDIA Corporation", cur, prior, piotroski, altman, quality };
+  const earnings = earningsQuality(cur, prior);
+  return { name: "NVIDIA Corporation", cur, prior, piotroski, altman, quality, earnings };
 }
 
 /* ── Tone maps ─────────────────────────────────────────────────────────────── */
@@ -127,7 +131,7 @@ export function FundamentalQuality({ symbol = "NVDA" }: { symbol?: string }) {
       const r = await fetch(`/api/edgar/financials?symbol=${encodeURIComponent(active)}`, { cache: "no-store" });
       const j = (await r.json()) as FinancialsResponse;
       if (j.live) {
-        setModel({ name: j.name, cur: j.cur, prior: j.prior, piotroski: j.piotroski, altman: j.altman, quality: j.quality });
+        setModel({ name: j.name, cur: j.cur, prior: j.prior, piotroski: j.piotroski, altman: j.altman, quality: j.quality, earnings: j.earnings });
         setSource(j.source);
         setUpdated(new Date(j.asOf).toLocaleTimeString("en-US", { hour12: false }));
         setStatus("live");
@@ -150,7 +154,7 @@ export function FundamentalQuality({ symbol = "NVDA" }: { symbol?: string }) {
   };
 
   const m = model ?? demoModel();
-  const { name, cur, prior, piotroski, altman, quality } = m;
+  const { name, cur, prior, piotroski, altman, quality, earnings } = m;
 
   const finRows: { label: string; cur?: number; prior?: number }[] = [
     { label: "Revenue", cur: cur.revenue, prior: prior.revenue },
@@ -345,6 +349,38 @@ export function FundamentalQuality({ symbol = "NVDA" }: { symbol?: string }) {
           </div>
         </div>
       ) : null}
+
+      {/* 5 ── Earnings quality */}
+      <div className="border-b border-line px-4 py-4">
+        <div className="mb-3 flex items-center justify-between">
+          <span className="section-label text-[11px] text-muted">Earnings Quality (accruals)</span>
+          <span className={cn("font-mono text-lg font-semibold leading-none", GRADE_COLOR[earnings.grade])}>{earnings.grade}</span>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-muted">Accruals ratio (NI−CFO)/assets</span>
+              <span className={cn("font-mono tabular-nums", earnings.accrualsRatio == null ? "text-dim" : earnings.accrualsRatio < 5 ? "text-pos" : earnings.accrualsRatio > 15 ? "text-neg" : "text-warn")}>
+                {earnings.accrualsRatio == null ? "—" : `${earnings.accrualsRatio.toFixed(1)}%`}
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-muted">Cash conversion (CFO/NI)</span>
+              <span className={cn("font-mono tabular-nums", earnings.cashConversion == null ? "text-dim" : earnings.cashConversion >= 0.9 ? "text-pos" : earnings.cashConversion >= 0.6 ? "text-warn" : "text-neg")}>
+                {earnings.cashConversion == null ? "—" : `${earnings.cashConversion.toFixed(2)}×`}
+              </span>
+            </div>
+          </div>
+          <div className="space-y-1">
+            {earnings.flags.map((fl, i) => (
+              <div key={i} className="flex items-start gap-1.5 text-2xs">
+                <span className={cn("mt-1 h-1.5 w-1.5 shrink-0 rounded-full", fl.tone === "pos" ? "bg-pos" : fl.tone === "neg" ? "bg-neg" : "bg-warn")} />
+                <span className="text-muted">{fl.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* Footer */}
       <div className="px-4 py-2 font-mono text-2xs text-dim">

@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { stooqCandles } from "@/lib/markets/providers";
 import { piotroskiFScore, altmanZScore, qualityGrade, type FinancialYear } from "@/lib/engine/fundamental-score";
+import { earningsQuality } from "@/lib/engine/earnings-quality";
 
 export const runtime = "nodejs";
 export const revalidate = 21600; // 6h
@@ -96,7 +97,8 @@ export async function GET(req: NextRequest) {
       debtToEquity: cur.stockholdersEquity ? ((cur.totalLiabilities ?? 0) / cur.stockholdersEquity) * 100 : undefined,
     });
 
-    return Response.json({ live: true, source: "SEC EDGAR XBRL", asOf: new Date().toISOString(), symbol, cik: co.cik, name: facts.entityName ?? co.title, cur, prior, piotroski, altman, quality });
+    const earnings = earningsQuality(cur, prior);
+    return Response.json({ live: true, source: "SEC EDGAR XBRL", asOf: new Date().toISOString(), symbol, cik: co.cik, name: facts.entityName ?? co.title, cur, prior, piotroski, altman, quality, earnings });
   } catch (e) {
     return Response.json({ live: false, error: debug ? String(e) : undefined });
   }
