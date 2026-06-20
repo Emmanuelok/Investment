@@ -3,6 +3,7 @@ import { LiveDot } from "@/components/live/live-stat";
 import { LiveMacro } from "@/components/data/live-macro";
 import { MacroRegime } from "@/components/engine/macro-regime";
 import { BondAnalytics } from "@/components/engine/bond-analytics";
+import { YieldCurve } from "@/components/engine/yield-curve";
 import { Sparkline, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { signClass, fmtBps } from "@/lib/format";
@@ -168,6 +169,9 @@ export default function EconomicsPage() {
 
       {/* Fixed-income / bond analytics engine */}
       <BondAnalytics />
+
+      {/* Treasury yield-curve analytics engine */}
+      <YieldCurve />
 
       {/* Macro KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
