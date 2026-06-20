@@ -3,6 +3,7 @@ import {
   Th, Td, Ticker, StatusDot,
 } from "@/components/ui/kit";
 import { LiveDot } from "@/components/live/live-stat";
+import { PositionSizer } from "@/components/engine/position-sizer";
 import { ProgressBar, Sparkline, DeltaBars } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { Shield, Wave } from "@/components/icons";
@@ -62,6 +63,8 @@ export default function ExecutionPage() {
           </div>
         }
       />
+
+      <PositionSizer />
 
       {/* KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
