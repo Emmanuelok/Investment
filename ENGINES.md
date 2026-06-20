@@ -6,7 +6,7 @@ series, a covariance matrix, or a closed-form model. When a live market feed is
 reachable the engines run on real data; otherwise they run the identical math on
 a deterministic seeded series and say so honestly (`ENGINE · DEMO DATA`).
 
-- **Pure math, fully tested** — `src/lib/engine/*`, **71 unit tests** (`*.test.ts`).
+- **Pure math, fully tested** — `src/lib/engine/*`, **88 unit tests** (`*.test.ts`).
 - **Server routes** — `src/app/api/engine/*` fetch real candles/series and run the engines.
 - **Interactive UIs** — `src/components/engine/*`, each with an honest `LIVE / DEMO` badge.
 
@@ -38,6 +38,9 @@ price/series feed ──▶ /api/engine/* (Node route) ──▶ engine lib (pur
 | `macro.ts` | Growth×inflation quadrant + recession-risk nowcast | `classifyMacroRegime, seriesTrend` |
 | `seasonality.ts` | Monthly & day-of-week return patterns from a dated series | `computeSeasonality` |
 | `montecarlo.ts` | Seeded GBM simulation — terminal distribution, percentiles, path VaR | `simulateGBM` |
+| `riskmetrics.ts` | Rolling Sharpe/vol/beta + drawdown profile (underwater, Ulcer index, episodes) | `rollingMetrics, drawdownAnalytics` |
+| `bonds.ts` | Bond price, YTM, Macaulay/modified duration, convexity, DV01 (no feed) | `analyzeBond, yieldToMaturity, priceChangeForBpShift` |
+| `sizing.ts` | Kelly, expectancy, risk-of-ruin, stop-based share sizing (no feed) | `kellyFraction, expectancy, riskOfRuin, positionSize` |
 
 All engines are deterministic: same input → same output. The Monte-Carlo engine
 is seeded, so even the stochastic simulation is reproducible.
@@ -79,6 +82,8 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/quant/backtest` | Strategy Backtest Lab |
 | `/quant/strategies` | Options Pricer + Pairs / Stat-Arb |
 | `/risk` | Correlation Matrix + Monte-Carlo Simulator |
+| `/attribution` | Risk Analytics (rolling Sharpe/vol/beta + underwater drawdown) |
+| `/execution` | Position Sizer (Kelly, expectancy, stop-based sizing) |
 | `/portfolio` | Portfolio Analytics (risk contribution, VaR) |
 | `/optimizer` | Portfolio Construction (equal / inverse-vol / risk-parity / min-variance) |
 
@@ -106,7 +111,7 @@ exactly which feed was unreachable.
 ## Testing
 
 ```bash
-npm test          # 71 engine + quant unit tests
+npm test          # 88 engine + quant unit tests
 npm run build     # typecheck + production build
 ```
 
