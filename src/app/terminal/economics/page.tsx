@@ -1,6 +1,7 @@
 import { PageHeader, Panel, PanelHeader, Chip, Stat, Th, Td, KpiCard, StatusDot } from "@/components/ui/kit";
 import { LiveDot } from "@/components/live/live-stat";
 import { LiveMacro } from "@/components/data/live-macro";
+import { MacroRegime } from "@/components/engine/macro-regime";
 import { Sparkline, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { signClass, fmtBps } from "@/lib/format";
@@ -160,6 +161,9 @@ export default function EconomicsPage() {
 
       {/* Live FRED macro data panel */}
       <LiveMacro />
+
+      {/* Macro regime / nowcast engine */}
+      <MacroRegime />
 
       {/* Macro KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">

@@ -25,10 +25,10 @@ export async function GET(req: NextRequest) {
       const candles: Candle[] = bars.slice(-90).map((b) => ({ o: b.o, h: b.h, l: b.l, c: b.c, v: b.v }));
       return detectAnomalies(candles).map((a): AnomalyHit => ({ ...a, symbol: sym }));
     }));
-    const hits = settled.filter((r): r is PromiseFulfilledResult<AnomalyHit[]> => r.status === "fulfilled").flatMap((r) => r.value);
-    hits.sort((x, y) => y.severity - x.severity);
-    const scanned = settled.filter((r) => r.status === "fulfilled").length;
-    return Response.json({ live: true, source: "engine·stooq", asOf: new Date().toISOString(), scanned, anomalies: hits.slice(0, 40) });
+    const ok = settled.filter((r): r is PromiseFulfilledResult<AnomalyHit[]> => r.status === "fulfilled");
+    if (!ok.length) throw new Error("no symbols resolved"); // all feeds failed → honest demo fallback
+    const hits = ok.flatMap((r) => r.value).sort((x, y) => y.severity - x.severity);
+    return Response.json({ live: true, source: "engine·stooq", asOf: new Date().toISOString(), scanned: ok.length, anomalies: hits.slice(0, 40) });
   } catch (e) {
     return Response.json({ live: false, error: debug ? String(e) : undefined });
   }

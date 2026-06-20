@@ -14,6 +14,7 @@ import { Sparkline, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { ChevronRight, Sparkle, Route } from "@/components/icons";
 import { LiveDot } from "@/components/live/live-stat";
+import { AnomalyScanner } from "@/components/engine/anomaly-scanner";
 import { CANDIDATES, FAMILY_COVERAGE } from "@/lib/data";
 import { EXTRA_SIGNALS, SIGNAL_KPIS } from "@/lib/data/argus";
 import { fmtSigned, fmtNum, signClass } from "@/lib/format";
@@ -78,6 +79,8 @@ export default function SignalFeedPage() {
           </div>
         }
       />
+
+      <AnomalyScanner />
 
       {/* KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">

@@ -1,6 +1,7 @@
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td, Ticker, Stat, StatusDot } from "@/components/ui/kit";
 import { LiveDot } from "@/components/live/live-stat";
 import { CorrelationMatrix } from "@/components/engine/correlation-matrix";
+import { MonteCarlo } from "@/components/engine/monte-carlo";
 import { Sparkline, DeltaBars, ProgressBar, Ring } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import {
@@ -82,6 +83,8 @@ export default function RiskPage() {
       />
 
       <CorrelationMatrix />
+
+      <MonteCarlo />
 
       {/* VaR KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
