@@ -6,7 +6,7 @@ series, a covariance matrix, or a closed-form model. When a live market feed is
 reachable the engines run on real data; otherwise they run the identical math on
 a deterministic seeded series and say so honestly (`ENGINE · DEMO DATA`).
 
-- **Pure math, fully tested** — `src/lib/engine/*`, **102 unit tests** (`*.test.ts`).
+- **Pure math, fully tested** — `src/lib/engine/*`, **115 unit tests** (`*.test.ts`).
 - **Server routes** — `src/app/api/engine/*` fetch real candles/series and run the engines.
 - **Interactive UIs** — `src/components/engine/*`, each with an honest `LIVE / DEMO` badge.
 
@@ -43,6 +43,9 @@ price/series feed ──▶ /api/engine/* (Node route) ──▶ engine lib (pur
 | `sizing.ts` | Kelly, expectancy, risk-of-ruin, stop-based share sizing (no feed) | `kellyFraction, expectancy, riskOfRuin, positionSize` |
 | `fundamental-score.ts` | Piotroski F-Score, Altman Z-Score, composite quality grade | `piotroskiFScore, altmanZScore, qualityGrade` |
 | `dcf.ts` | Two-stage DCF intrinsic value + sensitivity grid (no feed) | `dcf, dcfSensitivity` |
+| `relative-strength.ts` | Weighted momentum, RS line, RS new-high, RS rating (1–99) | `weightedMomentum, rsLine, rsRating, relativeReturn` |
+| `trend-template.ts` | Minervini 8-point Stage-2 uptrend template | `trendTemplate` |
+| `earnings-quality.ts` | Sloan accruals, cash conversion, earnings-quality grade | `earningsQuality` |
 
 All engines are deterministic: same input → same output. The Monte-Carlo engine
 is seeded, so even the stochastic simulation is reproducible.
@@ -69,6 +72,7 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/api/engine/macro` | Macro regime + recession nowcast (FRED) | — |
 | `/api/engine/optimizer` | All 4 construction schemes over real covariance | `?symbols=SPY,QQQ,TLT,GLD` |
 | `/api/engine/riskmetrics` | Rolling Sharpe/vol/beta + drawdown profile | `?symbol=SPY&window=63` |
+| `/api/engine/trend` | Trend-template + RS-rating momentum scan | `?symbols=NVDA,AAPL&benchmark=SPY` |
 | `/api/edgar/financials` | Real SEC XBRL financials + Piotroski/Altman/grade | `?symbol=AAPL` |
 
 > Bonds & position-sizing are pure-math (no feed) and run entirely client-side — no route needed.
@@ -82,11 +86,11 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/` (home) | **Intelligence Briefing** — cross-engine fusion (regime + macro + factor leaders + anomalies + composite risk-posture gauge) |
 | `/terminal` | Market Intelligence (regime + real sector breadth + insights) |
 | `/terminal/screener` | Multi-Factor Scan |
-| `/terminal/security` | Tech Panel + Seasonality + **Fundamental Quality** (Piotroski/Altman/grade) |
+| `/terminal/security` | Tech Panel + Seasonality + **Fundamental Quality** (Piotroski/Altman/earnings/grade) |
 | `/charts` | Tech Panel + Seasonality |
 | `/quant` | **DCF Valuation** (intrinsic value + sensitivity) |
 | `/terminal/economics` | Macro Regime nowcast |
-| `/signals` | Anomaly Scanner |
+| `/signals` | Anomaly Scanner + Trend & RS Scanner |
 | `/quant/backtest` | Strategy Backtest Lab |
 | `/quant/strategies` | Options Pricer + Pairs / Stat-Arb |
 | `/risk` | Correlation Matrix + Monte-Carlo Simulator |
@@ -119,7 +123,7 @@ exactly which feed was unreachable.
 ## Testing
 
 ```bash
-npm test          # 102 engine + quant unit tests
+npm test          # 115 engine + quant unit tests
 npm run build     # typecheck + production build
 ```
 
