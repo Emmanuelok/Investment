@@ -11,6 +11,7 @@ import { fmtNum, fmtPct, fmtSignedPct, fmtUsdCompact, signClass } from "@/lib/fo
 import { cn } from "@/lib/cn";
 import { OptionsPricer } from "@/components/engine/options-pricer";
 import { PairsTrade } from "@/components/engine/pairs-trade";
+import { OptionsStrategy } from "@/components/engine/options-strategy";
 import type { StrategyStatus } from "@/lib/data/kepler";
 
 export const metadata = { title: "KEPLER — Strategies" };
@@ -99,6 +100,8 @@ export default function StrategiesPage() {
       <OptionsPricer />
 
       <PairsTrade />
+
+      <OptionsStrategy />
 
       {/* KPI Deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
