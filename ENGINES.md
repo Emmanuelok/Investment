@@ -6,7 +6,7 @@ series, a covariance matrix, or a closed-form model. When a live market feed is
 reachable the engines run on real data; otherwise they run the identical math on
 a deterministic seeded series and say so honestly (`ENGINE · DEMO DATA`).
 
-- **Pure math, fully tested** — `src/lib/engine/*`, **127 unit tests** (`*.test.ts`).
+- **Pure math, fully tested** — `src/lib/engine/*`, **143 unit tests** (`*.test.ts`).
 - **Server routes** — `src/app/api/engine/*` fetch real candles/series and run the engines.
 - **Interactive UIs** — `src/components/engine/*`, each with an honest `LIVE / DEMO` badge.
 
@@ -48,6 +48,9 @@ price/series feed ──▶ /api/engine/* (Node route) ──▶ engine lib (pur
 | `earnings-quality.ts` | Sloan accruals, cash conversion, earnings-quality grade | `earningsQuality` |
 | `beneish.ts` | Beneish M-Score earnings-manipulation detector (8 indices) | `beneishMScore` |
 | `stress.ts` | Portfolio stress test — 8 calibrated crisis scenarios, asset-class shocks | `computeStress, applyScenario, SCENARIOS` |
+| `options-strategy.ts` | Multi-leg options payoff/value curves, net Greeks, breakevens, 9 presets | `analyzeStrategy, presetLegs` |
+| `factor-attribution.ts` | Multivariate OLS: alpha + market/size/value/momentum/quality/low-vol betas | `attributeReturns, multiRegress` |
+| `rrg.ts` | Relative-Rotation-Graph — JdK RS-Ratio/Momentum + quadrant | `computeRRG, quadrantOf` |
 
 All engines are deterministic: same input → same output. The Monte-Carlo engine
 is seeded, so even the stochastic simulation is reproducible.
@@ -76,6 +79,8 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/api/engine/riskmetrics` | Rolling Sharpe/vol/beta + drawdown profile | `?symbol=SPY&window=63` |
 | `/api/engine/trend` | Trend-template + RS-rating momentum scan | `?symbols=NVDA,AAPL&benchmark=SPY` |
 | `/api/engine/stress` | Portfolio crisis-scenario stress test | `?holdings=SPY:0.5,TLT:0.3,GLD:0.2` |
+| `/api/engine/factor-attribution` | Factor decomposition of returns (OLS on ETF proxies) | `?symbol=NVDA` |
+| `/api/engine/rrg` | Sector-rotation relative-rotation graph | `?symbols=XLK,XLF&benchmark=SPY` |
 | `/api/edgar/financials` | Real SEC XBRL financials + Piotroski/Altman/grade | `?symbol=AAPL` |
 
 > Bonds & position-sizing are pure-math (no feed) and run entirely client-side — no route needed.
@@ -90,16 +95,16 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/terminal` | Market Intelligence (regime + real sector breadth + insights) |
 | `/terminal/screener` | Multi-Factor Scan |
 | `/terminal/security` | Tech Panel + Seasonality + **Fundamental Quality** (Piotroski/Altman/earnings/Beneish/grade) |
-| `/charts` | Tech Panel + Seasonality |
+| `/charts` | Tech Panel + Seasonality + **Sector Rotation (RRG)** |
 | `/quant` | **DCF Valuation** (intrinsic value + sensitivity) |
 | `/terminal/economics` | Macro Regime nowcast |
 | `/signals` | Anomaly Scanner + Trend & RS Scanner |
 | `/quant/backtest` | Strategy Backtest Lab |
-| `/quant/strategies` | Options Pricer + Pairs / Stat-Arb |
+| `/quant/strategies` | Options Pricer + Pairs/Stat-Arb + **Strategy Builder** (multi-leg) |
 | `/risk` | Correlation Matrix + Monte-Carlo + **Stress Test** (crisis scenarios) |
 | `/attribution` | Risk Analytics (rolling Sharpe/vol/beta + underwater drawdown) |
 | `/execution` | Position Sizer (Kelly, expectancy, stop-based sizing) |
-| `/portfolio` | Portfolio Analytics (risk contribution, VaR) |
+| `/portfolio` | Portfolio Analytics + **Factor Attribution** (alpha/betas) |
 | `/optimizer` | Portfolio Construction (equal / inverse-vol / risk-parity / min-variance) |
 
 The alert bell in the shell is a live **rule engine**, and **ATHENA** (the AI
@@ -126,7 +131,7 @@ exactly which feed was unreachable.
 ## Testing
 
 ```bash
-npm test          # 127 engine + quant unit tests
+npm test          # 143 engine + quant unit tests
 npm run build     # typecheck + production build
 ```
 
