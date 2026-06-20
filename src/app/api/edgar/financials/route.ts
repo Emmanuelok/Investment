@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import { stooqCandles } from "@/lib/markets/providers";
 import { piotroskiFScore, altmanZScore, qualityGrade, type FinancialYear } from "@/lib/engine/fundamental-score";
 import { earningsQuality } from "@/lib/engine/earnings-quality";
+import { beneishMScore, type BeneishYear } from "@/lib/engine/beneish";
 
 export const runtime = "nodejs";
 export const revalidate = 21600; // 6h
@@ -98,7 +99,16 @@ export async function GET(req: NextRequest) {
     });
 
     const earnings = earningsQuality(cur, prior);
-    return Response.json({ live: true, source: "SEC EDGAR XBRL", asOf: new Date().toISOString(), symbol, cik: co.cik, name: facts.entityName ?? co.title, cur, prior, piotroski, altman, quality, earnings });
+    const beneishYear = (fy: number, base: FinancialYear): BeneishYear => ({
+      revenue: base.revenue, grossProfit: base.grossProfit, currentAssets: base.currentAssets, totalAssets: base.totalAssets,
+      longTermDebt: base.longTermDebt, currentLiabilities: base.currentLiabilities, netIncome: base.netIncome, operatingCashFlow: base.operatingCashFlow,
+      receivables: pick([["us-gaap", "AccountsReceivableNetCurrent"]] as [string, string][], fy),
+      ppe: pick([["us-gaap", "PropertyPlantAndEquipmentNet"]] as [string, string][], fy),
+      depreciation: pick([["us-gaap", "DepreciationDepletionAndAmortization"], ["us-gaap", "DepreciationAmortizationAndAccretionNet"], ["us-gaap", "Depreciation"]] as [string, string][], fy),
+      sga: pick([["us-gaap", "SellingGeneralAndAdministrativeExpense"], ["us-gaap", "SellingGeneralAndAdministrativeExpenses"]] as [string, string][], fy),
+    });
+    const beneish = beneishMScore(beneishYear(cy, cur), beneishYear(py, prior));
+    return Response.json({ live: true, source: "SEC EDGAR XBRL", asOf: new Date().toISOString(), symbol, cik: co.cik, name: facts.entityName ?? co.title, cur, prior, piotroski, altman, quality, earnings, beneish });
   } catch (e) {
     return Response.json({ live: false, error: debug ? String(e) : undefined });
   }

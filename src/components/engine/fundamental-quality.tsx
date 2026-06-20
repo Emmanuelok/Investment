@@ -13,6 +13,7 @@ import {
   type QualityGrade,
 } from "@/lib/engine/fundamental-score";
 import { earningsQuality, type EarningsQuality } from "@/lib/engine/earnings-quality";
+import { beneishMScore, type Beneish } from "@/lib/engine/beneish";
 import { cn } from "@/lib/cn";
 
 /* ── Types ─────────────────────────────────────────────────────────────────── */
@@ -32,6 +33,7 @@ interface FinancialsLive {
   altman: Altman;
   quality: QualityGrade;
   earnings: EarningsQuality;
+  beneish: Beneish;
 }
 type FinancialsResponse = FinancialsLive | { live: false };
 
@@ -43,6 +45,7 @@ interface ViewModel {
   altman: Altman;
   quality: QualityGrade;
   earnings: EarningsQuality;
+  beneish: Beneish;
 }
 
 /* ── Formatting ────────────────────────────────────────────────────────────── */
@@ -91,7 +94,11 @@ function demoModel(): ViewModel {
     debtToEquity: (cur.totalLiabilities! / cur.stockholdersEquity!) * 100,
   });
   const earnings = earningsQuality(cur, prior);
-  return { name: "NVIDIA Corporation", cur, prior, piotroski, altman, quality, earnings };
+  const beneish = beneishMScore(
+    { revenue: cur.revenue, grossProfit: cur.grossProfit, currentAssets: cur.currentAssets, totalAssets: cur.totalAssets, longTermDebt: cur.longTermDebt, currentLiabilities: cur.currentLiabilities, netIncome: cur.netIncome, operatingCashFlow: cur.operatingCashFlow, receivables: 9999e6, ppe: 3914e6, depreciation: 1508e6, sga: 2654e6 },
+    { revenue: prior.revenue, grossProfit: prior.grossProfit, currentAssets: prior.currentAssets, totalAssets: prior.totalAssets, longTermDebt: prior.longTermDebt, currentLiabilities: prior.currentLiabilities, netIncome: prior.netIncome, operatingCashFlow: prior.operatingCashFlow, receivables: 3827e6, ppe: 3807e6, depreciation: 1544e6, sga: 2440e6 },
+  );
+  return { name: "NVIDIA Corporation", cur, prior, piotroski, altman, quality, earnings, beneish };
 }
 
 /* ── Tone maps ─────────────────────────────────────────────────────────────── */
@@ -131,7 +138,7 @@ export function FundamentalQuality({ symbol = "NVDA" }: { symbol?: string }) {
       const r = await fetch(`/api/edgar/financials?symbol=${encodeURIComponent(active)}`, { cache: "no-store" });
       const j = (await r.json()) as FinancialsResponse;
       if (j.live) {
-        setModel({ name: j.name, cur: j.cur, prior: j.prior, piotroski: j.piotroski, altman: j.altman, quality: j.quality, earnings: j.earnings });
+        setModel({ name: j.name, cur: j.cur, prior: j.prior, piotroski: j.piotroski, altman: j.altman, quality: j.quality, earnings: j.earnings, beneish: j.beneish });
         setSource(j.source);
         setUpdated(new Date(j.asOf).toLocaleTimeString("en-US", { hour12: false }));
         setStatus("live");
@@ -154,7 +161,7 @@ export function FundamentalQuality({ symbol = "NVDA" }: { symbol?: string }) {
   };
 
   const m = model ?? demoModel();
-  const { name, cur, prior, piotroski, altman, quality, earnings } = m;
+  const { name, cur, prior, piotroski, altman, quality, earnings, beneish } = m;
 
   const finRows: { label: string; cur?: number; prior?: number }[] = [
     { label: "Revenue", cur: cur.revenue, prior: prior.revenue },
@@ -380,6 +387,29 @@ export function FundamentalQuality({ symbol = "NVDA" }: { symbol?: string }) {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* 6 ── Beneish M-Score */}
+      <div className="border-b border-line px-4 py-4">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="section-label text-[11px] text-muted">Beneish M-Score (manipulation risk)</span>
+          <div className="flex items-center gap-2">
+            <span className={cn("font-mono text-lg font-semibold leading-none", beneish.verdict === "Unlikely" ? "text-pos" : beneish.verdict === "Likely manipulation" ? "text-neg" : "text-warn")}>
+              {beneish.m != null ? beneish.m.toFixed(2) : "—"}
+            </span>
+            <Chip tone={beneish.verdict === "Unlikely" ? "pos" : beneish.verdict === "Likely manipulation" ? "neg" : beneish.verdict === "Grey" ? "warn" : "default"}>{beneish.verdict}</Chip>
+          </div>
+        </div>
+        <div className="mb-2.5 font-mono text-2xs text-dim">M &gt; −1.78 → likely manipulator · M &lt; −2.22 → unlikely · {Math.round(beneish.coverage * 100)}% data coverage</div>
+        <div className="grid gap-x-6 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-4">
+          {beneish.indices.map((ix) => (
+            <div key={ix.key} className="flex items-center justify-between gap-2 text-xs">
+              <span className={cn("text-muted", ix.estimated && "opacity-50")} title={ix.name}>{ix.key}{ix.estimated ? "*" : ""}</span>
+              <span className="font-mono tabular-nums text-ink">{ix.value.toFixed(2)}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-2 font-mono text-2xs text-dim">* estimated (neutral) — concept not present in the filing</div>
       </div>
 
       {/* Footer */}
