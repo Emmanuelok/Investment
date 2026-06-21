@@ -6,7 +6,7 @@ series, a covariance matrix, or a closed-form model. When a live market feed is
 reachable the engines run on real data; otherwise they run the identical math on
 a deterministic seeded series and say so honestly (`ENGINE · DEMO DATA`).
 
-- **Pure math, fully tested** — `src/lib/engine/*`, **184 unit tests** (`*.test.ts`).
+- **Pure math, fully tested** — `src/lib/engine/*`, **206 unit tests** (`*.test.ts`).
 - **Server routes** — `src/app/api/engine/*` fetch real candles/series and run the engines.
 - **Interactive UIs** — `src/components/engine/*`, each with an honest `LIVE / DEMO` badge.
 
@@ -57,6 +57,9 @@ price/series feed ──▶ /api/engine/* (Node route) ──▶ engine lib (pur
 | `nowcast.ts` | Macro nowcast — z-scored FRED indicators → Growth/Inflation/Labor composites + business-cycle quadrant | `buildNowcast, zLast, meanStd` |
 | `efficiency.ts` | Market efficiency — Hurst R/S, Lo-MacKinlay variance ratios, autocorrelation → trend/mean-revert vote | `analyzeEfficiency, hurstRS, varianceRatio, autocorr` |
 | `dividend-safety.ts` | Dividend safety — FCF coverage, payout ratio, net-debt/EBITDA → 0-100 score + flags | `dividendSafety` |
+| `volatility.ts` | Range-based vol (Parkinson/Garman-Klass/Rogers-Satchell/Yang-Zhang) + volatility cone with percentile | `analyzeVolatility, yangZhangVol, volatilityCone` |
+| `liquidity.ts` | Microstructure — Amihud illiquidity, Roll implied spread, dollar volume → liquidity score | `analyzeLiquidity, amihudIlliquidity, rollSpread` |
+| `performance.ts` | Full-period risk-adjusted ratios — Sharpe/Sortino/Calmar/Omega/tail-ratio + skew/kurtosis | `performanceRatios, maxDrawdownOf` |
 
 All engines are deterministic: same input → same output. The Monte-Carlo engine
 is seeded, so even the stochastic simulation is reproducible.
@@ -92,6 +95,9 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/api/engine/nowcast` | Macro nowcast business-cycle quadrant (13 FRED series) | — |
 | `/api/engine/efficiency` | Hurst / variance-ratio trend vs mean-reversion (Stooq) | `?symbol=SPY` |
 | `/api/engine/dividend-safety` | FCF-coverage dividend-safety score (SEC XBRL) | `?symbol=AAPL` |
+| `/api/engine/volatility` | Range-based vol estimators + volatility cone (Stooq OHLC) | `?symbol=SPY` |
+| `/api/engine/liquidity` | Amihud / Roll spread / dollar-volume liquidity (Stooq) | `?symbol=SPY` |
+| `/api/engine/performance` | Sharpe/Sortino/Calmar/Omega ratio suite (Stooq + FRED rf) | `?symbol=SPY` |
 | `/api/edgar/financials` | Real SEC XBRL financials + Piotroski/Altman/grade | `?symbol=AAPL` |
 | `/api/edgar/insider` | Real SEC Form 4 insider transactions + net signal | `?symbol=NVDA` |
 
@@ -106,15 +112,15 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/` (home) | **Intelligence Briefing** — cross-engine fusion (regime + macro + factor leaders + anomalies + composite risk-posture gauge) |
 | `/terminal` | Market Intelligence (regime + real sector breadth + insights) |
 | `/terminal/screener` | Multi-Factor Scan |
-| `/terminal/security` | Tech Panel + Seasonality + **Fundamental Quality** (Piotroski/Altman/earnings/Beneish/grade) + **Insider Activity** (Form 4) + **Credit Risk** (Merton DD) |
+| `/terminal/security` | Tech Panel + Seasonality + **Fundamental Quality** (Piotroski/Altman/earnings/Beneish/grade) + **Insider Activity** (Form 4) + **Credit Risk** (Merton DD) + **Liquidity** (Amihud/Roll) |
 | `/charts` | Tech Panel + Seasonality + **Market Efficiency** (Hurst/VR) + **Sector Rotation (RRG)** |
 | `/quant` | **DCF Valuation** (intrinsic value + sensitivity) |
 | `/terminal/economics` | Macro Regime nowcast + **Treasury Yield Curve** + **Macro Nowcast** (cycle quadrant) |
 | `/signals` | Anomaly Scanner + Trend & RS Scanner |
 | `/quant/backtest` | Strategy Backtest Lab |
 | `/quant/strategies` | Options Pricer + Pairs/Stat-Arb + **Strategy Builder** (multi-leg) |
-| `/risk` | Correlation Matrix + Monte-Carlo + **Stress Test** (crisis scenarios) |
-| `/attribution` | Risk Analytics (rolling Sharpe/vol/beta + underwater drawdown) |
+| `/risk` | Correlation Matrix + Monte-Carlo + **Stress Test** (crisis scenarios) + **Volatility Lab** (estimators + cone) |
+| `/attribution` | Risk Analytics (rolling Sharpe/vol/beta + underwater drawdown) + **Performance Ratios** (Sharpe/Sortino/Calmar/Omega) |
 | `/execution` | Position Sizer (Kelly, expectancy, stop-based sizing) |
 | `/portfolio` | Portfolio Analytics + **Factor Attribution** (alpha/betas) |
 | `/optimizer` | Portfolio Construction (equal / inverse-vol / risk-parity / min-variance) |
@@ -143,7 +149,7 @@ exactly which feed was unreachable.
 ## Testing
 
 ```bash
-npm test          # 184 engine + quant unit tests
+npm test          # 206 engine + quant unit tests
 npm run build     # typecheck + production build
 ```
 
