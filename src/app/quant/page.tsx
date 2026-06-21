@@ -10,6 +10,7 @@ import {
 import { fmtNum, fmtPct, signClass } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import { DcfValuation } from "@/components/engine/dcf-valuation";
+import { SeasonalityCalendar } from "@/components/engine/seasonality-calendar";
 
 export const metadata = { title: "KEPLER — Research Environment" };
 
@@ -52,6 +53,8 @@ export default function QuantResearchPage() {
       />
 
       <DcfValuation />
+
+      <SeasonalityCalendar />
 
       {/* PIT Guarantee Callout */}
       <div className="relative overflow-hidden rounded-md border border-accent/30 bg-accent/5 px-4 py-3.5">
