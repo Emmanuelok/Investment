@@ -40,6 +40,32 @@ export async function finnhubProfile(sym: string): Promise<Profile> {
   return { name: j.name ?? sym, marketCap: j.marketCapitalization * 1e6, shares: (j.shareOutstanding ?? 0) * 1e6, industry: j.finnhubIndustry ?? "", currency: j.currency ?? "USD" };
 }
 
+/* ── Finnhub basic financials / metrics (keyed) ──────────────────────────── */
+export type Metrics = { dividendYield: number; payoutRatio: number; roe: number; debtToEquity: number; pe: number; netMargin: number };
+export async function finnhubMetrics(sym: string): Promise<Metrics> {
+  const key = process.env.FINNHUB_API_KEY;
+  if (!key) throw new Error("no FINNHUB_API_KEY");
+  const r = await fetch(`${FH}/stock/metric?symbol=${encodeURIComponent(sym)}&metric=all&token=${key}`, { next: { revalidate: 86400 }, signal: AbortSignal.timeout(8000) });
+  if (!r.ok) throw new Error(`finnhub metric ${sym} HTTP ${r.status}`);
+  const j = (await r.json()) as { metric?: Record<string, number | null> };
+  const m = j.metric ?? {};
+  const num = (...keys: string[]): number => {
+    for (const k of keys) if (typeof m[k] === "number" && Number.isFinite(m[k])) return m[k] as number;
+    return 0;
+  };
+  // Finnhub yields/ROE/margins are percentages; payout is sometimes a ratio → normalize to %.
+  let payout = num("payoutRatioTTM", "payoutRatioAnnual");
+  if (payout > 0 && payout <= 2.5) payout *= 100;
+  return {
+    dividendYield: num("dividendYieldIndicatedAnnual", "currentDividendYieldTTM"),
+    payoutRatio: payout,
+    roe: num("roeTTM", "roeRfy", "roeAnnual"),
+    debtToEquity: num("totalDebt/totalEquityQuarterly", "longTermDebt/equityAnnual", "totalDebt/totalEquityAnnual"),
+    pe: num("peTTM", "peBasicExclExtraTTM", "peAnnual"),
+    netMargin: num("netProfitMarginTTM", "netProfitMarginAnnual"),
+  };
+}
+
 /* ── Stooq daily candles (no key) ────────────────────────────────────────── */
 const STOOQ_MAP: Record<string, string> = { "^VIX": "^vix", "^GDAXI": "^dax", "^N225": "^nkx", "^HSI": "^hsi", "^GSPC": "^spx", "^IXIC": "^ndq", "^DJI": "^dji", "^SKEW": "^skew" };
 function stooqSym(sym: string): string {
