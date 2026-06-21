@@ -2,6 +2,7 @@ import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td, Ticker, Stat, St
 import { LiveDot } from "@/components/live/live-stat";
 import { PortfolioAnalytics } from "@/components/engine/portfolio-analytics";
 import { FactorAttribution } from "@/components/engine/factor-attribution";
+import { SectorScorecard } from "@/components/engine/sector-scorecard";
 import { Sparkline, ProgressBar, Ring } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import {
@@ -109,6 +110,9 @@ export default function PortfolioPage() {
 
       {/* Factor attribution engine */}
       <FactorAttribution />
+
+      {/* Sector scorecard engine */}
+      <SectorScorecard />
 
       {/* KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
