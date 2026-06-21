@@ -6,7 +6,7 @@ series, a covariance matrix, or a closed-form model. When a live market feed is
 reachable the engines run on real data; otherwise they run the identical math on
 a deterministic seeded series and say so honestly (`ENGINE · DEMO DATA`).
 
-- **Pure math, fully tested** — `src/lib/engine/*`, **279 unit tests** (`*.test.ts`).
+- **Pure math, fully tested** — `src/lib/engine/*`, **288 unit tests** (`*.test.ts`).
 - **Server routes** — `src/app/api/engine/*` fetch real candles/series and run the engines.
 - **Interactive UIs** — `src/components/engine/*`, each with an honest `LIVE / DEMO` badge.
 
@@ -71,6 +71,8 @@ price/series feed ──▶ /api/engine/* (Node route) ──▶ engine lib (pur
 | `commodities.ts` | Copper/gold (growth) + broad momentum (inflation) → macro cycle quadrant (reflation/stagflation/…) | `buildCommodities, ratioChange` |
 | `risk-posture.ts` | Synthesis — normalizes curve/credit/VIX/trend/breadth/recession to 0-100 and blends to one risk-on/off posture | `buildRiskPosture, scoreFromSpread, scoreFromVix` |
 | `crypto-regime.ts` | BTC trend regime + ETH/BTC risk appetite + crypto breadth, per-coin RSI/returns/drawdown | `buildCryptoRegime, coinRead` |
+| `regional-rotation.ts` | World equity rotation — US-vs-world, EM-vs-DM, global breadth → allocation tilt & risk appetite | `buildRegionalRotation` |
+| `dollar-regime.ts` | Dollar index trend/percentile → Strong/Neutral/Weak regime + currency leaderboard + risk implication | `buildDollarRegime` |
 
 All engines are deterministic: same input → same output. The Monte-Carlo engine
 is seeded, so even the stochastic simulation is reproducible.
@@ -120,6 +122,8 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/api/engine/commodities` | Commodity cycle quadrant — copper/gold + momentum (Stooq) | — |
 | `/api/engine/risk-posture` | Cross-asset risk-on/off synthesis of 6 signals (FRED + Stooq) | — |
 | `/api/engine/crypto-regime` | BTC regime + ETH/BTC risk appetite + crypto breadth (Binance) | — |
+| `/api/engine/regional-rotation` | Global equity rotation — US/DM/EM tilt & risk appetite (Stooq) | — |
+| `/api/engine/dollar-regime` | Dollar regime + currency leaderboard (Stooq) | — |
 | `/api/edgar/financials` | Real SEC XBRL financials + Piotroski/Altman/grade | `?symbol=AAPL` |
 | `/api/edgar/insider` | Real SEC Form 4 insider transactions + net signal | `?symbol=NVDA` |
 
@@ -137,12 +141,12 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/terminal/security` | Tech Panel + Seasonality + **Fundamental Quality** (Piotroski/Altman/earnings/Beneish/grade) + **Insider Activity** (Form 4) + **Credit Risk** (Merton DD) + **Liquidity** (Amihud/Roll) |
 | `/charts` | Tech Panel + Seasonality + **Market Efficiency** + **Sector Rotation (RRG)** + **Commodities Cycle** + **Crypto Regime** (BTC/alt) |
 | `/quant` | **DCF Valuation** (intrinsic value + sensitivity) |
-| `/terminal/economics` | Macro Regime nowcast + **Yield Curve** + **Macro Nowcast** + **Credit Conditions** + **Real Rates** (TIPS) + **Recession Risk** (curve probit + Sahm) |
+| `/terminal/economics` | Macro nowcast + **Yield Curve** + **Macro Nowcast** + **Credit Conditions** + **Real Rates** + **Recession Risk** + **Dollar Regime** (FX) |
 | `/signals` | Anomaly Scanner + Trend & RS Scanner + **Market Breadth** (internals / A-D / McClellan) |
 | `/quant/backtest` | Strategy Backtest Lab |
 | `/quant/strategies` | Options Pricer + Pairs/Stat-Arb + **Strategy Builder** (multi-leg) |
 | `/risk` | Correlation Matrix + **Correlation Regime** (cross-asset) + Monte-Carlo + **Stress Test** (crisis scenarios) + **Volatility Lab** (estimators + cone) + **VIX / Fear** (term structure) |
-| `/attribution` | Risk Analytics (rolling Sharpe/vol/beta) + **Performance Ratios** (Sharpe/Sortino/Calmar/Omega) + **Style Rotation** (factor leadership) |
+| `/attribution` | Risk Analytics + **Performance Ratios** + **Style Rotation** (factor) + **Regional Rotation** (geographic) |
 | `/execution` | Position Sizer (Kelly, expectancy, stop-based sizing) |
 | `/portfolio` | Portfolio Analytics + **Factor Attribution** (alpha/betas) |
 | `/optimizer` | Portfolio Construction (equal / inverse-vol / risk-parity / min-variance) + **Tangency / Efficient Frontier** (max-Sharpe + CML) |
@@ -171,7 +175,7 @@ exactly which feed was unreachable.
 ## Testing
 
 ```bash
-npm test          # 279 engine + quant unit tests
+npm test          # 288 engine + quant unit tests
 npm run build     # typecheck + production build
 ```
 
