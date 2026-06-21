@@ -6,6 +6,7 @@ import { BondAnalytics } from "@/components/engine/bond-analytics";
 import { YieldCurve } from "@/components/engine/yield-curve";
 import { MacroNowcast } from "@/components/engine/macro-nowcast";
 import { CreditConditions } from "@/components/engine/credit-conditions";
+import { RealRates } from "@/components/engine/real-rates";
 import { Sparkline, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { signClass, fmtBps } from "@/lib/format";
@@ -180,6 +181,9 @@ export default function EconomicsPage() {
 
       {/* Credit-conditions engine — ICE BofA OAS spread-stress regime */}
       <CreditConditions />
+
+      {/* Real-rates engine — 10Y decomposition into real yield + breakeven inflation */}
+      <RealRates />
 
       {/* Macro KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
