@@ -60,6 +60,15 @@ export async function stooqCandles(sym: string): Promise<Bar[]> {
   return bars;
 }
 
+/* ── Binance daily klines / candles (no key) ─────────────────────────────── */
+export async function binanceKlines(pair: string, limit = 400): Promise<Bar[]> {
+  const r = await fetch(`https://api.binance.com/api/v3/klines?symbol=${pair}&interval=1d&limit=${limit}`, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(8000) });
+  if (!r.ok) throw new Error(`binance klines ${pair} HTTP ${r.status}`);
+  const rows = (await r.json()) as (string | number)[][];
+  if (!Array.isArray(rows) || rows.length < 2) throw new Error(`binance klines ${pair} empty`);
+  return rows.map((k) => ({ t: Number(k[0]) / 1000, o: +k[1], h: +k[2], l: +k[3], c: +k[4], v: +k[5] })).filter((b) => Number.isFinite(b.c));
+}
+
 /* ── Binance crypto 24h (no key) ─────────────────────────────────────────── */
 export async function binance24h(pair: string): Promise<{ price: number; chgPct: number; volUsd: number }> {
   const r = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${pair}`, { next: { revalidate: 20 }, signal: AbortSignal.timeout(8000) });
