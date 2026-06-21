@@ -1,6 +1,7 @@
 import { PageHeader, Panel, PanelHeader, Chip, KpiCard, Th, Td, Ticker, Stat, StatusDot } from "@/components/ui/kit";
 import { LiveDot } from "@/components/live/live-stat";
 import { CorrelationMatrix } from "@/components/engine/correlation-matrix";
+import { CorrelationRegime } from "@/components/engine/correlation-regime";
 import { MonteCarlo } from "@/components/engine/monte-carlo";
 import { StressTest } from "@/components/engine/stress-test";
 import { VolatilityLab } from "@/components/engine/volatility-lab";
@@ -85,6 +86,8 @@ export default function RiskPage() {
       />
 
       <CorrelationMatrix />
+
+      <CorrelationRegime />
 
       <MonteCarlo />
 
