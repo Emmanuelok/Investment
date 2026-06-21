@@ -5,6 +5,7 @@ import { MacroRegime } from "@/components/engine/macro-regime";
 import { BondAnalytics } from "@/components/engine/bond-analytics";
 import { YieldCurve } from "@/components/engine/yield-curve";
 import { MacroNowcast } from "@/components/engine/macro-nowcast";
+import { CreditConditions } from "@/components/engine/credit-conditions";
 import { Sparkline, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { signClass, fmtBps } from "@/lib/format";
@@ -176,6 +177,9 @@ export default function EconomicsPage() {
 
       {/* Macro nowcast engine — z-scored business-cycle quadrant */}
       <MacroNowcast />
+
+      {/* Credit-conditions engine — ICE BofA OAS spread-stress regime */}
+      <CreditConditions />
 
       {/* Macro KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
