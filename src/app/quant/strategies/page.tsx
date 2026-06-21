@@ -11,6 +11,7 @@ import { fmtNum, fmtPct, fmtSignedPct, fmtUsdCompact, signClass } from "@/lib/fo
 import { cn } from "@/lib/cn";
 import { OptionsPricer } from "@/components/engine/options-pricer";
 import { PairsTrade } from "@/components/engine/pairs-trade";
+import { PairsScreener } from "@/components/engine/pairs-screener";
 import { OptionsStrategy } from "@/components/engine/options-strategy";
 import type { StrategyStatus } from "@/lib/data/kepler";
 
@@ -100,6 +101,8 @@ export default function StrategiesPage() {
       <OptionsPricer />
 
       <PairsTrade />
+
+      <PairsScreener />
 
       <OptionsStrategy />
 
