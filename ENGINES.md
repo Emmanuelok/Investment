@@ -6,7 +6,7 @@ series, a covariance matrix, or a closed-form model. When a live market feed is
 reachable the engines run on real data; otherwise they run the identical math on
 a deterministic seeded series and say so honestly (`ENGINE · DEMO DATA`).
 
-- **Pure math, fully tested** — `src/lib/engine/*`, **221 unit tests** (`*.test.ts`).
+- **Pure math, fully tested** — `src/lib/engine/*`, **251 unit tests** (`*.test.ts`).
 - **Server routes** — `src/app/api/engine/*` fetch real candles/series and run the engines.
 - **Interactive UIs** — `src/components/engine/*`, each with an honest `LIVE / DEMO` badge.
 
@@ -62,6 +62,10 @@ price/series feed ──▶ /api/engine/* (Node route) ──▶ engine lib (pur
 | `performance.ts` | Full-period risk-adjusted ratios — Sharpe/Sortino/Calmar/Omega/tail-ratio + skew/kurtosis | `performanceRatios, maxDrawdownOf` |
 | `tangency.ts` | Markowitz max-Sharpe & GMV portfolios, efficient frontier, long-only active-set | `analyzeTangency, tangencyPortfolio, efficientFrontier, maxSharpe` |
 | `credit-conditions.ts` | Credit-spread stress — percentile/z/momentum of ICE BofA OAS basket → 0-100 stress + regime | `buildCreditConditions, percentileOf` |
+| `breadth.ts` | Market internals — % above 50/200-DMA, A/D line, McClellan oscillator, Zweig thrust → breadth score & regime | `computeBreadth, memberRead` |
+| `correlation-regime.ts` | Cross-asset avg pairwise correlation, rolling percentile, equity-bond corr, effective bets → regime | `analyzeCorrelationRegime, avgPairwise` |
+| `vix-term.ts` | VIX term structure (contango/backwardation), percentile, variance-risk premium → fear score & regime | `analyzeVixTerm` |
+| `real-rates.ts` | Nominal = real (TIPS) + breakeven decomposition, 5y5y forward → real-rate & inflation regimes | `buildRealRates` |
 
 All engines are deterministic: same input → same output. The Monte-Carlo engine
 is seeded, so even the stochastic simulation is reproducible.
@@ -102,6 +106,10 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/api/engine/performance` | Sharpe/Sortino/Calmar/Omega ratio suite (Stooq + FRED rf) | `?symbol=SPY` |
 | `/api/engine/tangency` | Max-Sharpe + GMV + efficient frontier (Stooq + FRED rf) | `?symbols=SPY,QQQ,TLT,GLD` |
 | `/api/engine/credit-conditions` | ICE BofA OAS credit-stress regime (FRED) | — |
+| `/api/engine/breadth` | Market-breadth internals over a large-cap basket (Stooq) | `?symbols=AAPL,MSFT,…` |
+| `/api/engine/correlation-regime` | Cross-asset correlation regime / diversification (Stooq) | `?window=60` |
+| `/api/engine/vix-term` | VIX term-structure & fear regime (FRED + Stooq) | — |
+| `/api/engine/real-rates` | Real-yield / breakeven decomposition + regimes (FRED) | — |
 | `/api/edgar/financials` | Real SEC XBRL financials + Piotroski/Altman/grade | `?symbol=AAPL` |
 | `/api/edgar/insider` | Real SEC Form 4 insider transactions + net signal | `?symbol=NVDA` |
 
@@ -119,11 +127,11 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/terminal/security` | Tech Panel + Seasonality + **Fundamental Quality** (Piotroski/Altman/earnings/Beneish/grade) + **Insider Activity** (Form 4) + **Credit Risk** (Merton DD) + **Liquidity** (Amihud/Roll) |
 | `/charts` | Tech Panel + Seasonality + **Market Efficiency** (Hurst/VR) + **Sector Rotation (RRG)** |
 | `/quant` | **DCF Valuation** (intrinsic value + sensitivity) |
-| `/terminal/economics` | Macro Regime nowcast + **Treasury Yield Curve** + **Macro Nowcast** (cycle quadrant) + **Credit Conditions** (OAS stress) |
-| `/signals` | Anomaly Scanner + Trend & RS Scanner |
+| `/terminal/economics` | Macro Regime nowcast + **Treasury Yield Curve** + **Macro Nowcast** (cycle quadrant) + **Credit Conditions** (OAS stress) + **Real Rates** (TIPS decomposition) |
+| `/signals` | Anomaly Scanner + Trend & RS Scanner + **Market Breadth** (internals / A-D / McClellan) |
 | `/quant/backtest` | Strategy Backtest Lab |
 | `/quant/strategies` | Options Pricer + Pairs/Stat-Arb + **Strategy Builder** (multi-leg) |
-| `/risk` | Correlation Matrix + Monte-Carlo + **Stress Test** (crisis scenarios) + **Volatility Lab** (estimators + cone) |
+| `/risk` | Correlation Matrix + **Correlation Regime** (cross-asset) + Monte-Carlo + **Stress Test** (crisis scenarios) + **Volatility Lab** (estimators + cone) + **VIX / Fear** (term structure) |
 | `/attribution` | Risk Analytics (rolling Sharpe/vol/beta + underwater drawdown) + **Performance Ratios** (Sharpe/Sortino/Calmar/Omega) |
 | `/execution` | Position Sizer (Kelly, expectancy, stop-based sizing) |
 | `/portfolio` | Portfolio Analytics + **Factor Attribution** (alpha/betas) |
@@ -153,7 +161,7 @@ exactly which feed was unreachable.
 ## Testing
 
 ```bash
-npm test          # 221 engine + quant unit tests
+npm test          # 251 engine + quant unit tests
 npm run build     # typecheck + production build
 ```
 
