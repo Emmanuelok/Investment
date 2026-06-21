@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Panel, PanelHeader, Stat, Chip, Th, Td } from "@/components/ui/kit";
 import { ProgressBar } from "@/components/ui/viz";
-import { fmtNum, fmtPct, fmtSignedPct, signClass } from "@/lib/format";
+import { fmtPct, fmtSignedPct, signClass } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import { Rng } from "@/lib/rng";
 import {
@@ -60,21 +60,22 @@ function riskTone(risk: RegionalRisk): ChipTone {
 }
 
 /* ── Demo: seeded regional ETFs + an ACWI benchmark, run through the real engine ──
-   Each region is a geometric walk with a distinct daily drift so the rotation is
-   believable: the US leads the world, EM edges ahead of DM (risk-on) on the back
-   of strong China/India, and breadth is broad. Same `buildRegionalRotation` math
-   as the live route. */
+   Each region is a geometric walk with its own drift/vol so the rotation is
+   believable: emerging markets lead the world (India & China out front), the US
+   lags, EM sits well ahead of DM and breadth is broad — i.e. a risk-on, EM-led,
+   International-tilt tape. Seeds are pinned so the same `buildRegionalRotation`
+   math as the live route yields this story deterministically. */
 
-type DemoRegionSpec = { id: string; label: string; bucket: RegionBucket; drift: number; vol: number };
+type DemoRegionSpec = { id: string; label: string; bucket: RegionBucket; seed: string; drift: number; vol: number };
 
 const DEMO_REGIONS: DemoRegionSpec[] = [
-  { id: "SPY", label: "United States", bucket: "US", drift: 0.00082, vol: 0.0095 },
-  { id: "INDA", label: "India", bucket: "EM", drift: 0.00066, vol: 0.0124 },
-  { id: "FXI", label: "China", bucket: "EM", drift: 0.0006, vol: 0.0142 },
-  { id: "VGK", label: "Europe", bucket: "DM", drift: 0.00052, vol: 0.0105 },
-  { id: "EWJ", label: "Japan", bucket: "DM", drift: 0.00046, vol: 0.0112 },
-  { id: "EWU", label: "United Kingdom", bucket: "DM", drift: 0.00036, vol: 0.0108 },
-  { id: "EEM", label: "Emerging Markets", bucket: "EM", drift: 0.00044, vol: 0.013 },
+  { id: "FXI", label: "China", bucket: "EM", seed: "region-FXI-22", drift: 0.0007, vol: 0.0135 },
+  { id: "INDA", label: "India", bucket: "EM", seed: "region-INDA-37", drift: 0.00064, vol: 0.012 },
+  { id: "EEM", label: "Emerging Markets", bucket: "EM", seed: "region-EEM-28", drift: 0.0006, vol: 0.0124 },
+  { id: "VGK", label: "Europe", bucket: "DM", seed: "region-VGK-26", drift: 0.0005, vol: 0.0104 },
+  { id: "EWJ", label: "Japan", bucket: "DM", seed: "region-EWJ-14", drift: 0.00046, vol: 0.0112 },
+  { id: "EWU", label: "United Kingdom", bucket: "DM", seed: "region-EWU-19", drift: 0.0004, vol: 0.0108 },
+  { id: "SPY", label: "United States", bucket: "US", seed: "region-SPY-27", drift: 0.0004, vol: 0.009 },
 ];
 
 const DEMO_BENCH = "ACWI";
@@ -96,7 +97,7 @@ function buildDemo(): RegionalView {
     id: g.id,
     label: g.label,
     bucket: g.bucket,
-    closes: walk(`region-${g.id}`, DEMO_N, g.drift, g.vol),
+    closes: walk(g.seed, DEMO_N, g.drift, g.vol),
   }));
   const benchCloses = walk("region-ACWI", DEMO_N, 0.00048, 0.0092);
   const report = buildRegionalRotation(regions, DEMO_BENCH, benchCloses);

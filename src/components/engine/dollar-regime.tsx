@@ -72,15 +72,15 @@ const TREND_TONE: Record<FxRead["trend"], "pos" | "neg" | "default"> = {
  */
 type DemoSpec = { id: string; label: string; drift: number; vol: number };
 
-const DEMO_DOLLAR: DemoSpec = { id: "uup", label: "US Dollar Index", drift: 0.0009, vol: 0.005 };
+const DEMO_DOLLAR: DemoSpec = { id: "uup", label: "US Dollar Index", drift: 0.0011, vol: 0.004 };
 
 const DEMO_CURRENCIES: ReadonlyArray<DemoSpec> = [
-  { id: "chf", label: "Swiss Franc", drift: 0.0002, vol: 0.006 }, // firmest (safe haven holds up)
-  { id: "jpy", label: "Japanese Yen", drift: -0.0002, vol: 0.006 }, // roughly flat
-  { id: "eur", label: "Euro", drift: -0.0007, vol: 0.006 },
-  { id: "gbp", label: "British Pound", drift: -0.0009, vol: 0.007 },
-  { id: "cad", label: "Canadian Dollar", drift: -0.0011, vol: 0.006 },
-  { id: "aud", label: "Australian Dollar", drift: -0.0015, vol: 0.008 }, // weakest (high-beta to USD)
+  { id: "chf", label: "Swiss Franc", drift: 0.0004, vol: 0.004 }, // firmest (safe haven holds up)
+  { id: "jpy", label: "Japanese Yen", drift: -0.0006, vol: 0.005 },
+  { id: "eur", label: "Euro", drift: -0.0012, vol: 0.004 },
+  { id: "gbp", label: "British Pound", drift: -0.0015, vol: 0.005 },
+  { id: "cad", label: "Canadian Dollar", drift: -0.0018, vol: 0.004 },
+  { id: "aud", label: "Australian Dollar", drift: -0.0022, vol: 0.006 }, // weakest (high-beta to USD)
 ];
 
 function buildDemo(): DollarData {
