@@ -9,6 +9,7 @@ import { CreditConditions } from "@/components/engine/credit-conditions";
 import { RealRates } from "@/components/engine/real-rates";
 import { RecessionRisk } from "@/components/engine/recession-risk";
 import { DollarRegime } from "@/components/engine/dollar-regime";
+import { YieldMonitor } from "@/components/engine/yield-monitor";
 import { Sparkline, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { signClass, fmtBps } from "@/lib/format";
@@ -192,6 +193,9 @@ export default function EconomicsPage() {
 
       {/* Dollar-regime engine — dollar-index trend/momentum/percentile + FX basket */}
       <DollarRegime />
+
+      {/* Yield & carry monitor — fixed-income income ladder, percentiles & carry levers */}
+      <YieldMonitor />
 
       {/* Macro KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
