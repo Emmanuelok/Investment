@@ -17,6 +17,7 @@ import { LiveDot } from "@/components/live/live-stat";
 import { AnomalyScanner } from "@/components/engine/anomaly-scanner";
 import { TrendScanner } from "@/components/engine/trend-scanner";
 import { MarketBreadth } from "@/components/engine/market-breadth";
+import { TrendFollowing } from "@/components/engine/trend-following";
 import { CANDIDATES, FAMILY_COVERAGE } from "@/lib/data";
 import { EXTRA_SIGNALS, SIGNAL_KPIS } from "@/lib/data/argus";
 import { fmtSigned, fmtNum, signClass } from "@/lib/format";
@@ -87,6 +88,8 @@ export default function SignalFeedPage() {
       <TrendScanner />
 
       <MarketBreadth />
+
+      <TrendFollowing />
 
       {/* KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
