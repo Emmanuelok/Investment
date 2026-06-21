@@ -59,7 +59,7 @@ export function riskParityWeights(cov: CovMatrix, iters = 400): number[] {
 }
 
 /** Invert a square matrix via Gauss-Jordan with partial pivoting. */
-function invert(m: CovMatrix): CovMatrix | null {
+export function invert(m: CovMatrix): CovMatrix | null {
   const n = m.length;
   const a = m.map((row, i) => [...row, ...Array.from({ length: n }, (_, j) => (i === j ? 1 : 0))]);
   for (let col = 0; col < n; col++) {
@@ -75,7 +75,7 @@ function invert(m: CovMatrix): CovMatrix | null {
 }
 
 /** Euclidean projection onto the probability simplex {w≥0, Σw=1}. */
-function projectSimplex(v: number[]): number[] {
+export function projectSimplex(v: number[]): number[] {
   const n = v.length;
   const u = [...v].sort((a, b) => b - a);
   let css = 0, rho = 0, theta = 0;
