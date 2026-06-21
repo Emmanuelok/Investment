@@ -4,6 +4,7 @@ import { LiveFundamentals } from "@/components/markets/live-fundamentals";
 import { FundamentalQuality } from "@/components/engine/fundamental-quality";
 import { InsiderActivity } from "@/components/engine/insider-activity";
 import { CreditRisk } from "@/components/engine/credit-risk";
+import { LiquidityPanel } from "@/components/engine/liquidity-panel";
 import { TechPanel } from "@/components/engine/tech-panel";
 import { SeasonalityPanel } from "@/components/engine/seasonality-panel";
 import { LiveStat } from "@/components/live/live-stat";
@@ -51,6 +52,8 @@ export default function SecurityDesPage() {
       <InsiderActivity symbol="NVDA" />
 
       <CreditRisk symbol="NVDA" />
+
+      <LiquidityPanel symbol="NVDA" />
 
       <TechPanel symbol="NVDA" />
 
