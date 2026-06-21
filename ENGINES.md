@@ -6,7 +6,7 @@ series, a covariance matrix, or a closed-form model. When a live market feed is
 reachable the engines run on real data; otherwise they run the identical math on
 a deterministic seeded series and say so honestly (`ENGINE · DEMO DATA`).
 
-- **Pure math, fully tested** — `src/lib/engine/*`, **306 unit tests** (`*.test.ts`).
+- **Pure math, fully tested** — `src/lib/engine/*`, **315 unit tests** (`*.test.ts`).
 - **Server routes** — `src/app/api/engine/*` fetch real candles/series and run the engines.
 - **Interactive UIs** — `src/components/engine/*`, each with an honest `LIVE / DEMO` badge.
 
@@ -77,6 +77,8 @@ price/series feed ──▶ /api/engine/* (Node route) ──▶ engine lib (pur
 | `pairs-screener.ts` | Stat-arb universe scan — cointegration/half-life/z ranked by tradeability | `screenPairs` |
 | `sector-scorecard.ts` | Sector ranking (RS + trend) + tilt, offense-vs-defense risk-appetite read | `buildSectorScorecard` |
 | `yield-monitor.ts` | Fixed-income yield ladder — yield/percentile/spread + term & credit carry | `buildYieldMonitor` |
+| `income-screener.ts` | Dividend screener — yield rewarded but unsafe-yield penalized (payout/ROE/leverage) | `buildIncomeScreen` |
+| `seasonality-calendar.ts` | Multi-asset month-of-year seasonality + current-month tailwinds/headwinds | `buildSeasonalityCalendar, computeMonthlySeasonality` |
 
 All engines are deterministic: same input → same output. The Monte-Carlo engine
 is seeded, so even the stochastic simulation is reproducible.
@@ -132,6 +134,8 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/api/engine/pairs-screener` | Stat-arb pairs scan ranked by tradeability (Stooq) | `?symbols=KO,PEP,…` |
 | `/api/engine/sector-scorecard` | Sector ranking + offense/defense risk appetite (Stooq) | — |
 | `/api/engine/yield-monitor` | Fixed-income yield ladder + carry levers (FRED) | — |
+| `/api/engine/income-screener` | Dividend quality-income screener (Finnhub) | `?symbols=KO,PEP,…` |
+| `/api/engine/seasonality-calendar` | Multi-asset month-of-year seasonality (Stooq) | — |
 | `/api/edgar/financials` | Real SEC XBRL financials + Piotroski/Altman/grade | `?symbol=AAPL` |
 | `/api/edgar/insider` | Real SEC Form 4 insider transactions + net signal | `?symbol=NVDA` |
 
@@ -145,10 +149,10 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 |---|---|
 | `/` (home) | **Intelligence Briefing** — cross-engine fusion + **Market Risk Posture** (6-signal risk-on/off synthesis) |
 | `/terminal` | Market Intelligence (regime + real sector breadth + insights) |
-| `/terminal/screener` | Multi-Factor Scan |
+| `/terminal/screener` | Multi-Factor Scan + **Income Screener** (dividend quality) |
 | `/terminal/security` | Tech Panel + Seasonality + **Fundamental Quality** (Piotroski/Altman/earnings/Beneish/grade) + **Insider Activity** (Form 4) + **Credit Risk** (Merton DD) + **Liquidity** (Amihud/Roll) |
 | `/charts` | Tech Panel + Seasonality + **Market Efficiency** + **Sector Rotation (RRG)** + **Commodities Cycle** + **Crypto Regime** (BTC/alt) |
-| `/quant` | **DCF Valuation** (intrinsic value + sensitivity) |
+| `/quant` | **DCF Valuation** (intrinsic value + sensitivity) + **Seasonality Calendar** (multi-asset) |
 | `/terminal/economics` | Macro nowcast + **Yield Curve** + **Nowcast** + **Credit Conditions** + **Real Rates** + **Recession Risk** + **Dollar Regime** + **Yield Monitor** (income ladder) |
 | `/signals` | Anomaly Scanner + Trend & RS Scanner + **Market Breadth** (A-D / McClellan) + **Trend Following** (CTA book) |
 | `/quant/backtest` | Strategy Backtest Lab |
@@ -183,7 +187,7 @@ exactly which feed was unreachable.
 ## Testing
 
 ```bash
-npm test          # 306 engine + quant unit tests
+npm test          # 315 engine + quant unit tests
 npm run build     # typecheck + production build
 ```
 
