@@ -6,7 +6,7 @@ series, a covariance matrix, or a closed-form model. When a live market feed is
 reachable the engines run on real data; otherwise they run the identical math on
 a deterministic seeded series and say so honestly (`ENGINE · DEMO DATA`).
 
-- **Pure math, fully tested** — `src/lib/engine/*`, **206 unit tests** (`*.test.ts`).
+- **Pure math, fully tested** — `src/lib/engine/*`, **221 unit tests** (`*.test.ts`).
 - **Server routes** — `src/app/api/engine/*` fetch real candles/series and run the engines.
 - **Interactive UIs** — `src/components/engine/*`, each with an honest `LIVE / DEMO` badge.
 
@@ -60,6 +60,8 @@ price/series feed ──▶ /api/engine/* (Node route) ──▶ engine lib (pur
 | `volatility.ts` | Range-based vol (Parkinson/Garman-Klass/Rogers-Satchell/Yang-Zhang) + volatility cone with percentile | `analyzeVolatility, yangZhangVol, volatilityCone` |
 | `liquidity.ts` | Microstructure — Amihud illiquidity, Roll implied spread, dollar volume → liquidity score | `analyzeLiquidity, amihudIlliquidity, rollSpread` |
 | `performance.ts` | Full-period risk-adjusted ratios — Sharpe/Sortino/Calmar/Omega/tail-ratio + skew/kurtosis | `performanceRatios, maxDrawdownOf` |
+| `tangency.ts` | Markowitz max-Sharpe & GMV portfolios, efficient frontier, long-only active-set | `analyzeTangency, tangencyPortfolio, efficientFrontier, maxSharpe` |
+| `credit-conditions.ts` | Credit-spread stress — percentile/z/momentum of ICE BofA OAS basket → 0-100 stress + regime | `buildCreditConditions, percentileOf` |
 
 All engines are deterministic: same input → same output. The Monte-Carlo engine
 is seeded, so even the stochastic simulation is reproducible.
@@ -98,6 +100,8 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/api/engine/volatility` | Range-based vol estimators + volatility cone (Stooq OHLC) | `?symbol=SPY` |
 | `/api/engine/liquidity` | Amihud / Roll spread / dollar-volume liquidity (Stooq) | `?symbol=SPY` |
 | `/api/engine/performance` | Sharpe/Sortino/Calmar/Omega ratio suite (Stooq + FRED rf) | `?symbol=SPY` |
+| `/api/engine/tangency` | Max-Sharpe + GMV + efficient frontier (Stooq + FRED rf) | `?symbols=SPY,QQQ,TLT,GLD` |
+| `/api/engine/credit-conditions` | ICE BofA OAS credit-stress regime (FRED) | — |
 | `/api/edgar/financials` | Real SEC XBRL financials + Piotroski/Altman/grade | `?symbol=AAPL` |
 | `/api/edgar/insider` | Real SEC Form 4 insider transactions + net signal | `?symbol=NVDA` |
 
@@ -115,7 +119,7 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/terminal/security` | Tech Panel + Seasonality + **Fundamental Quality** (Piotroski/Altman/earnings/Beneish/grade) + **Insider Activity** (Form 4) + **Credit Risk** (Merton DD) + **Liquidity** (Amihud/Roll) |
 | `/charts` | Tech Panel + Seasonality + **Market Efficiency** (Hurst/VR) + **Sector Rotation (RRG)** |
 | `/quant` | **DCF Valuation** (intrinsic value + sensitivity) |
-| `/terminal/economics` | Macro Regime nowcast + **Treasury Yield Curve** + **Macro Nowcast** (cycle quadrant) |
+| `/terminal/economics` | Macro Regime nowcast + **Treasury Yield Curve** + **Macro Nowcast** (cycle quadrant) + **Credit Conditions** (OAS stress) |
 | `/signals` | Anomaly Scanner + Trend & RS Scanner |
 | `/quant/backtest` | Strategy Backtest Lab |
 | `/quant/strategies` | Options Pricer + Pairs/Stat-Arb + **Strategy Builder** (multi-leg) |
@@ -123,7 +127,7 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/attribution` | Risk Analytics (rolling Sharpe/vol/beta + underwater drawdown) + **Performance Ratios** (Sharpe/Sortino/Calmar/Omega) |
 | `/execution` | Position Sizer (Kelly, expectancy, stop-based sizing) |
 | `/portfolio` | Portfolio Analytics + **Factor Attribution** (alpha/betas) |
-| `/optimizer` | Portfolio Construction (equal / inverse-vol / risk-parity / min-variance) |
+| `/optimizer` | Portfolio Construction (equal / inverse-vol / risk-parity / min-variance) + **Tangency / Efficient Frontier** (max-Sharpe + CML) |
 
 The alert bell in the shell is a live **rule engine**, and **ATHENA** (the AI
 copilot) is grounded with live quotes + an engine-computed market regime read.
@@ -149,7 +153,7 @@ exactly which feed was unreachable.
 ## Testing
 
 ```bash
-npm test          # 206 engine + quant unit tests
+npm test          # 221 engine + quant unit tests
 npm run build     # typecheck + production build
 ```
 
