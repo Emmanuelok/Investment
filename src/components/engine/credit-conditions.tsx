@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { Panel, PanelHeader, Stat, Chip, Th, Td } from "@/components/ui/kit";
+import { Panel, PanelHeader, Chip, Th, Td } from "@/components/ui/kit";
 import { Ring } from "@/components/ui/viz";
 import { fmtNum, fmtPct, fmtBps, fmtSigned, signClass } from "@/lib/format";
 import { cn } from "@/lib/cn";
