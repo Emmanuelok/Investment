@@ -21,6 +21,7 @@ import { TechPanel } from "@/components/engine/tech-panel";
 import { SeasonalityPanel } from "@/components/engine/seasonality-panel";
 import { EfficiencyPanel } from "@/components/engine/efficiency-panel";
 import { SectorRotation } from "@/components/engine/sector-rotation";
+import { CommoditiesCycle } from "@/components/engine/commodities-cycle";
 
 export const metadata = { title: "HELIOS — Charting Engine" };
 
@@ -68,6 +69,8 @@ export default function ChartsPage() {
       <EfficiencyPanel symbol="SPY" />
 
       <SectorRotation />
+
+      <CommoditiesCycle />
 
       <LiveChartPanel />
 
