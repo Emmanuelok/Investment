@@ -8,6 +8,7 @@ import { fmtSigned } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import { LiveStat, LiveDot } from "@/components/live/live-stat";
 import { IntelBriefing } from "@/components/engine/intel-briefing";
+import { RiskPosture } from "@/components/engine/risk-posture";
 import type { ComponentProps } from "react";
 
 const LIVE_KPI: Record<string, ComponentProps<typeof LiveStat>> = {
@@ -40,6 +41,8 @@ export default function OverviewPage() {
       </div>
 
       <IntelBriefing />
+
+      <RiskPosture />
 
       {/* KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
