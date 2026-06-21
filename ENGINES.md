@@ -6,7 +6,7 @@ series, a covariance matrix, or a closed-form model. When a live market feed is
 reachable the engines run on real data; otherwise they run the identical math on
 a deterministic seeded series and say so honestly (`ENGINE · DEMO DATA`).
 
-- **Pure math, fully tested** — `src/lib/engine/*`, **268 unit tests** (`*.test.ts`).
+- **Pure math, fully tested** — `src/lib/engine/*`, **279 unit tests** (`*.test.ts`).
 - **Server routes** — `src/app/api/engine/*` fetch real candles/series and run the engines.
 - **Interactive UIs** — `src/components/engine/*`, each with an honest `LIVE / DEMO` badge.
 
@@ -69,6 +69,8 @@ price/series feed ──▶ /api/engine/* (Node route) ──▶ engine lib (pur
 | `recession.ts` | NY Fed yield-curve probit + Sahm rule + credit → 12-mo recession probability & composite risk | `buildRecession, probitRecession, sahmRule` |
 | `style-rotation.ts` | Factor leadership — trailing/excess returns, value-growth & size spreads → rotation regime + tilt | `buildStyleRotation, trailingReturn` |
 | `commodities.ts` | Copper/gold (growth) + broad momentum (inflation) → macro cycle quadrant (reflation/stagflation/…) | `buildCommodities, ratioChange` |
+| `risk-posture.ts` | Synthesis — normalizes curve/credit/VIX/trend/breadth/recession to 0-100 and blends to one risk-on/off posture | `buildRiskPosture, scoreFromSpread, scoreFromVix` |
+| `crypto-regime.ts` | BTC trend regime + ETH/BTC risk appetite + crypto breadth, per-coin RSI/returns/drawdown | `buildCryptoRegime, coinRead` |
 
 All engines are deterministic: same input → same output. The Monte-Carlo engine
 is seeded, so even the stochastic simulation is reproducible.
@@ -116,6 +118,8 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 | `/api/engine/recession` | Recession probability — curve probit + Sahm + credit (FRED) | — |
 | `/api/engine/style-rotation` | Factor / style leadership vs SPY (Stooq) | — |
 | `/api/engine/commodities` | Commodity cycle quadrant — copper/gold + momentum (Stooq) | — |
+| `/api/engine/risk-posture` | Cross-asset risk-on/off synthesis of 6 signals (FRED + Stooq) | — |
+| `/api/engine/crypto-regime` | BTC regime + ETH/BTC risk appetite + crypto breadth (Binance) | — |
 | `/api/edgar/financials` | Real SEC XBRL financials + Piotroski/Altman/grade | `?symbol=AAPL` |
 | `/api/edgar/insider` | Real SEC Form 4 insider transactions + net signal | `?symbol=NVDA` |
 
@@ -127,11 +131,11 @@ Each route validates symbols (`/^[A-Z0-9.^=-]{1,12}$/`), fetches real data
 
 | Page | Engine panels |
 |---|---|
-| `/` (home) | **Intelligence Briefing** — cross-engine fusion (regime + macro + factor leaders + anomalies + composite risk-posture gauge) |
+| `/` (home) | **Intelligence Briefing** — cross-engine fusion + **Market Risk Posture** (6-signal risk-on/off synthesis) |
 | `/terminal` | Market Intelligence (regime + real sector breadth + insights) |
 | `/terminal/screener` | Multi-Factor Scan |
 | `/terminal/security` | Tech Panel + Seasonality + **Fundamental Quality** (Piotroski/Altman/earnings/Beneish/grade) + **Insider Activity** (Form 4) + **Credit Risk** (Merton DD) + **Liquidity** (Amihud/Roll) |
-| `/charts` | Tech Panel + Seasonality + **Market Efficiency** (Hurst/VR) + **Sector Rotation (RRG)** + **Commodities Cycle** (reflation/stagflation) |
+| `/charts` | Tech Panel + Seasonality + **Market Efficiency** + **Sector Rotation (RRG)** + **Commodities Cycle** + **Crypto Regime** (BTC/alt) |
 | `/quant` | **DCF Valuation** (intrinsic value + sensitivity) |
 | `/terminal/economics` | Macro Regime nowcast + **Yield Curve** + **Macro Nowcast** + **Credit Conditions** + **Real Rates** (TIPS) + **Recession Risk** (curve probit + Sahm) |
 | `/signals` | Anomaly Scanner + Trend & RS Scanner + **Market Breadth** (internals / A-D / McClellan) |
@@ -167,7 +171,7 @@ exactly which feed was unreachable.
 ## Testing
 
 ```bash
-npm test          # 268 engine + quant unit tests
+npm test          # 279 engine + quant unit tests
 npm run build     # typecheck + production build
 ```
 
