@@ -8,6 +8,7 @@ import { MacroNowcast } from "@/components/engine/macro-nowcast";
 import { CreditConditions } from "@/components/engine/credit-conditions";
 import { RealRates } from "@/components/engine/real-rates";
 import { RecessionRisk } from "@/components/engine/recession-risk";
+import { DollarRegime } from "@/components/engine/dollar-regime";
 import { Sparkline, ProgressBar } from "@/components/ui/viz";
 import { Icon } from "@/components/icon-map";
 import { signClass, fmtBps } from "@/lib/format";
@@ -188,6 +189,9 @@ export default function EconomicsPage() {
 
       {/* Recession-risk engine — yield-curve probit + Sahm rule + credit stress */}
       <RecessionRisk />
+
+      {/* Dollar-regime engine — dollar-index trend/momentum/percentile + FX basket */}
+      <DollarRegime />
 
       {/* Macro KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
