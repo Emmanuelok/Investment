@@ -11,6 +11,7 @@ import { cn } from "@/lib/cn";
 import { RiskAnalytics } from "@/components/engine/risk-analytics";
 import { PerformanceRatios } from "@/components/engine/performance-ratios";
 import { StyleRotation } from "@/components/engine/style-rotation";
+import { RegionalRotation } from "@/components/engine/regional-rotation";
 
 export const metadata = { title: "Performance & Attribution — AEGIS" };
 
@@ -77,6 +78,8 @@ export default function AttributionPage() {
       <PerformanceRatios symbol="SPY" />
 
       <StyleRotation />
+
+      <RegionalRotation />
 
       {/* KPI deck */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
