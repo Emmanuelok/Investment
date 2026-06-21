@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { Panel, PanelHeader, Stat, Chip, Th, Td } from "@/components/ui/kit";
 import { ProgressBar } from "@/components/ui/viz";
-import { fmtNum, fmtSignedPct, signClass } from "@/lib/format";
+import { fmtNum, signClass } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import { Rng } from "@/lib/rng";
 import {
